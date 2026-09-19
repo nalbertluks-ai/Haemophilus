@@ -1,0 +1,218 @@
+{
+  "fotos": [
+    {
+      "nome": "mev-colorizada",
+      "arquivo": "assets/fotos/mev-colorizada.webp",
+      "w": 1000,
+      "h": 790,
+      "kb": 203,
+      "origem": "1.png",
+      "nota": "PROCEDENCIA PENDENTE"
+    },
+    {
+      "nome": "gram-escarro",
+      "arquivo": "assets/fotos/gram-escarro.webp",
+      "w": 1920,
+      "h": 1200,
+      "kb": 217,
+      "origem": "Haemophilus_influenzae_sputum_1000x_edited.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "phil-1947",
+      "arquivo": "assets/fotos/phil-1947.webp",
+      "w": 700,
+      "h": 679,
+      "kb": 69,
+      "origem": "1947_lores.jpg",
+      "nota": "PROCEDENCIA PENDENTE"
+    },
+    {
+      "nome": "gram-positivo-contraste",
+      "arquivo": "assets/fotos/gram-positivo-contraste.webp",
+      "w": 1280,
+      "h": 1290,
+      "kb": 198,
+      "origem": "1000x_Magnification_of_Gram_Stain_of_Ligilactobacillus_animalis_Under_Brightfield_Microscopy ótima qualidade.jpg",
+      "nota": "Lactobacillus - so para contraste de coloracao"
+    },
+    {
+      "nome": "agar-sangue",
+      "arquivo": "assets/fotos/agar-sangue.webp",
+      "w": 737,
+      "h": 740,
+      "kb": 154,
+      "origem": "satelitismo.png",
+      "nota": ""
+    },
+    {
+      "nome": "agar-chocolate",
+      "arquivo": "assets/fotos/agar-chocolate.webp",
+      "w": 1534,
+      "h": 1534,
+      "kb": 377,
+      "origem": "Haemophilus_influenzae aga chcolate tavkez.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "agar-chocolate-pequena",
+      "arquivo": "assets/fotos/agar-chocolate-pequena.webp",
+      "w": 350,
+      "h": 220,
+      "kb": 13,
+      "origem": "haemophilus-ducreyi_01(1)-350x220 chcollate hagar.png",
+      "nota": ""
+    },
+    {
+      "nome": "discos-xv",
+      "arquivo": "assets/fotos/discos-xv.webp",
+      "w": 1550,
+      "h": 1015,
+      "kb": 178,
+      "origem": "testes do x v e xv.png",
+      "nota": ""
+    },
+    {
+      "nome": "cerebro-exsudato",
+      "arquivo": "assets/fotos/cerebro-exsudato.webp",
+      "w": 700,
+      "h": 449,
+      "kb": 49,
+      "origem": "hib-2.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "epiglote",
+      "arquivo": "assets/fotos/epiglote.webp",
+      "w": 481,
+      "h": 447,
+      "kb": 19,
+      "origem": "epiglottitis_endoscopy.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "otite-abaulada",
+      "arquivo": "assets/fotos/otite-abaulada.webp",
+      "w": 378,
+      "h": 362,
+      "kb": 10,
+      "origem": "otite media 2.webp",
+      "nota": ""
+    },
+    {
+      "nome": "otite-1",
+      "arquivo": "assets/fotos/otite-1.webp",
+      "w": 638,
+      "h": 635,
+      "kb": 52,
+      "origem": "otite media 1.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "celulite-periorbitaria",
+      "arquivo": "assets/fotos/celulite-periorbitaria.webp",
+      "w": 470,
+      "h": 310,
+      "kb": 17,
+      "origem": "criança.avif",
+      "nota": ""
+    },
+    {
+      "nome": "cancro-mole-1",
+      "arquivo": "assets/fotos/cancro-mole-1.webp",
+      "w": 2015,
+      "h": 1402,
+      "kb": 353,
+      "origem": "chancro mole.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "cancro-mole-2",
+      "arquivo": "assets/fotos/cancro-mole-2.webp",
+      "w": 800,
+      "h": 544,
+      "kb": 26,
+      "origem": "chancroid.webp",
+      "nota": ""
+    },
+    {
+      "nome": "ducreyi-gram-1",
+      "arquivo": "assets/fotos/ducreyi-gram-1.webp",
+      "w": 700,
+      "h": 472,
+      "kb": 25,
+      "origem": "ducrey.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "ducreyi-gram-2",
+      "arquivo": "assets/fotos/ducreyi-gram-2.webp",
+      "w": 2458,
+      "h": 2406,
+      "kb": 498,
+      "origem": "ducrey2.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "ducreyi-render",
+      "arquivo": "assets/fotos/ducreyi-render.webp",
+      "w": 852,
+      "h": 600,
+      "kb": 92,
+      "origem": "haemophilus-ducreyi.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "cocobacilos-render",
+      "arquivo": "assets/fotos/cocobacilos-render.webp",
+      "w": 850,
+      "h": 567,
+      "kb": 73,
+      "origem": "haemophilus-influenzae-type-b-vaccine-market-a-lifesaver-for-global-health-expansion.webp",
+      "nota": ""
+    },
+    {
+      "nome": "conjuntivite",
+      "arquivo": "assets/fotos/conjuntivite.webp",
+      "w": 1920,
+      "h": 942,
+      "kb": 162,
+      "origem": "Conjuntivite-bacteriana.jpg",
+      "nota": ""
+    },
+    {
+      "nome": "esquema-fagocito",
+      "arquivo": "assets/fotos/esquema-fagocito.webp",
+      "w": 599,
+      "h": 413,
+      "kb": 20,
+      "origem": "Macrophage or polymorphonuclear leukocyte phagocytosing H influenzae coated with antibodies specific for the capsule and somatic antigen..jpg",
+      "nota": "so referencia para redesenho"
+    }
+  ],
+  "videos": [
+    {
+      "nome": "satelitismo",
+      "arquivo": "assets/video/satelitismo.mp4",
+      "poster": "assets/video/satelitismo.jpg",
+      "kb": 37905
+    },
+    {
+      "nome": "epiglotite",
+      "arquivo": "assets/video/epiglotite.mp4",
+      "poster": "assets/video/epiglotite.jpg",
+      "kb": 7743
+    }
+  ],
+  "descartados": {
+    "360_F_1758233442_POS8DxbHtTWZO9w3N3SHKafCud0tWsp3.jpg": "miniatura de banco pago, bacilos genericos",
+    "2317730-bacterial-pili-haemophilus-ducreyi.jpg": "marca d agua Science Source",
+    "haemophilus-ducreyi-bacteria-cnriscience-photo-library.jpg": "276x400, direitos reservados",
+    "melhor qualidade agar choco.jpg": "marca d agua microbiologyinpictures",
+    "vacina haemolfilus b.png": "duplicata menor do render de cocobacilos; nao e vacina",
+    "Haemophilus_influenzae agar chocolate": "duplicata exata (hash) da placa tavkez",
+    "inferior viwew of a brain infected withe hame influenz.avif": "duplicata do hib-2.jpg em pior qualidade",
+    "chacro mole na boca.png": "captura de PowerPoint; lesoes papilomatosas, nao e cancro mole",
+    "febre purpurica.jpg": "228 px; exantema nao compativel com purpura fulminante"
+  }
+}

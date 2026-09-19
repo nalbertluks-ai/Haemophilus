@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Haemophilus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+  <div id="atmosfera"></div>
+  <div id="midia-fundo"></div>
+  <div id="gl"></div>
+  <div id="midia"></div>
+  <svg id="calls" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="rotulos"></div>
+  <div id="texto"></div>
+  <div id="estudo"></div>
+
+  <!-- cortina de capitulo: iris em forma de cocobacilo -->
+  <svg id="cortina" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="m-cortina"><rect width="100%" height="100%" fill="#fff"/>
+      <g id="furo"><path d="M -0.6 -0.5 H 0.6 A 0.5 0.5 0 0 1 0.6 0.5 H -0.6 A 0.5 0.5 0 0 1 -0.6 -0.5 Z" fill="#000"/></g></mask></defs>
+    <rect width="100%" height="100%" fill="#12100e" mask="url(#m-cortina)"/>
+  </svg>
+
+  <div id="grao"></div>
+  <div id="ui">
+    <div id="marca">Haemophilus <em>· microbiologia</em></div>
+    <nav id="indice"></nav>
+    <div id="rodape"><span class="cont"></span><span class="barra"><i></i></span></div>
+    <div id="dica">→ avançar &nbsp;·&nbsp; arraste o modelo &nbsp;·&nbsp; F tela cheia</div>
+  </div>
+  <div id="tip"></div>
+  <div id="carga"><b>Haemophilus</b><span><i></i></span></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

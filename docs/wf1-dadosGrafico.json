@@ -1,0 +1,601 @@
+{
+ "series": [
+  {
+   "rotulo": "EUA - doença invasiva por Haemophilus influenzae (todos os sorotipos) em menores de 5 anos, vigilância nacional NNDSS/NETSS",
+   "unidade": "casos por 100.000 crianças menores de 5 anos",
+   "fonte_url": "https://www.cdc.gov/mmwr/preview/mmwrhtml/00055745.htm",
+   "marco_vacina": 1990,
+   "pontos": [
+    {
+     "ano": 1987,
+     "valor": 41
+    },
+    {
+     "ano": 1993,
+     "valor": 2.4
+    },
+    {
+     "ano": 1994,
+     "valor": 1.7
+    },
+    {
+     "ano": 1996,
+     "valor": 1.5
+    },
+    {
+     "ano": 1997,
+     "valor": 1.3
+    }
+   ]
+  },
+  {
+   "rotulo": "EUA - doença invasiva por Hib (sorotipo b confirmado) em menores de 5 anos, vigilância ativa laboratorial multiestadual, taxa ajustada por raça - SÓ 2 PONTOS",
+   "unidade": "casos por 100.000 crianças menores de 5 anos (ajustado por raça)",
+   "fonte_url": "https://www.cdc.gov/mmwr/preview/mmwrhtml/00055745.htm",
+   "marco_vacina": 1990,
+   "pontos": [
+    {
+     "ano": 1989,
+     "valor": 34
+    },
+    {
+     "ano": 1997,
+     "valor": 0.4
+    }
+   ]
+  },
+  {
+   "rotulo": "EUA - doença invasiva por Hib (sorotipo b), TODAS as idades, áreas de vigilância ABCs (mostra o piso pós-vacinal, ano a ano)",
+   "unidade": "casos por 100.000 habitantes (todas as idades, áreas ABCs)",
+   "fonte_url": "https://data.cdc.gov/d/uxwq-vny5",
+   "pontos": [
+    {
+     "ano": 1997,
+     "valor": 0.3
+    },
+    {
+     "ano": 1998,
+     "valor": 0.17
+    },
+    {
+     "ano": 1999,
+     "valor": 0.13
+    },
+    {
+     "ano": 2000,
+     "valor": 0.14
+    },
+    {
+     "ano": 2001,
+     "valor": 0.06
+    },
+    {
+     "ano": 2002,
+     "valor": 0.04
+    },
+    {
+     "ano": 2003,
+     "valor": 0.04
+    },
+    {
+     "ano": 2004,
+     "valor": 0.05
+    },
+    {
+     "ano": 2005,
+     "valor": 0.04
+    },
+    {
+     "ano": 2006,
+     "valor": 0.04
+    },
+    {
+     "ano": 2007,
+     "valor": 0.03
+    },
+    {
+     "ano": 2008,
+     "valor": 0.05
+    },
+    {
+     "ano": 2009,
+     "valor": 0.03
+    },
+    {
+     "ano": 2010,
+     "valor": 0.04
+    },
+    {
+     "ano": 2011,
+     "valor": 0.03
+    },
+    {
+     "ano": 2012,
+     "valor": 0.02
+    },
+    {
+     "ano": 2013,
+     "valor": 0.03
+    },
+    {
+     "ano": 2014,
+     "valor": 0.03
+    },
+    {
+     "ano": 2015,
+     "valor": 0.02
+    },
+    {
+     "ano": 2016,
+     "valor": 0.03
+    },
+    {
+     "ano": 2017,
+     "valor": 0.02
+    },
+    {
+     "ano": 2018,
+     "valor": 0.02
+    },
+    {
+     "ano": 2019,
+     "valor": 0.04
+    },
+    {
+     "ano": 2020,
+     "valor": 0.02
+    },
+    {
+     "ano": 2021,
+     "valor": 0.03
+    },
+    {
+     "ano": 2022,
+     "valor": 0.03
+    },
+    {
+     "ano": 2023,
+     "valor": 0.03
+    },
+    {
+     "ano": 2024,
+     "valor": 0.03
+    }
+   ]
+  },
+  {
+   "rotulo": "EUA - doença invasiva por H. influenzae NÃO TIPÁVEL, TODAS as idades, áreas ABCs (série de contraste: o que subiu enquanto o Hib caía)",
+   "unidade": "casos por 100.000 habitantes (todas as idades, áreas ABCs)",
+   "fonte_url": "https://data.cdc.gov/d/uxwq-vny5",
+   "pontos": [
+    {
+     "ano": 1997,
+     "valor": 0.54
+    },
+    {
+     "ano": 1998,
+     "valor": 0.85
+    },
+    {
+     "ano": 1999,
+     "valor": 0.95
+    },
+    {
+     "ano": 2000,
+     "valor": 0.76
+    },
+    {
+     "ano": 2001,
+     "valor": 0.93
+    },
+    {
+     "ano": 2002,
+     "valor": 0.82
+    },
+    {
+     "ano": 2003,
+     "valor": 0.91
+    },
+    {
+     "ano": 2004,
+     "valor": 0.97
+    },
+    {
+     "ano": 2005,
+     "valor": 0.95
+    },
+    {
+     "ano": 2006,
+     "valor": 1.12
+    },
+    {
+     "ano": 2007,
+     "valor": 1.07
+    },
+    {
+     "ano": 2008,
+     "valor": 1.04
+    },
+    {
+     "ano": 2009,
+     "valor": 1.17
+    },
+    {
+     "ano": 2010,
+     "valor": 1.11
+    },
+    {
+     "ano": 2011,
+     "valor": 1.17
+    },
+    {
+     "ano": 2012,
+     "valor": 1.16
+    },
+    {
+     "ano": 2013,
+     "valor": 1.25
+    },
+    {
+     "ano": 2014,
+     "valor": 1.17
+    },
+    {
+     "ano": 2015,
+     "valor": 1.41
+    },
+    {
+     "ano": 2016,
+     "valor": 1.45
+    },
+    {
+     "ano": 2017,
+     "valor": 1.68
+    },
+    {
+     "ano": 2018,
+     "valor": 1.56
+    },
+    {
+     "ano": 2019,
+     "valor": 1.54
+    },
+    {
+     "ano": 2020,
+     "valor": 0.87
+    },
+    {
+     "ano": 2021,
+     "valor": 0.62
+    },
+    {
+     "ano": 2022,
+     "valor": 1.4
+    },
+    {
+     "ano": 2023,
+     "valor": 1.93
+    },
+    {
+     "ano": 2024,
+     "valor": 1.82
+    }
+   ]
+  },
+  {
+   "rotulo": "BRASIL - meningite por Hib em menores de 1 ano, série nacional anual 1983-2002 (SÉRIE RECOMENDADA)",
+   "unidade": "casos por 100.000 crianças menores de 1 ano",
+   "fonte_url": "https://www.scielo.br/j/rsbmt/a/JrfMB3xtKG4pHd6JT8VRpvj/?lang=pt",
+   "marco_vacina": 1999,
+   "pontos": [
+    {
+     "ano": 1983,
+     "valor": 10.05
+    },
+    {
+     "ano": 1984,
+     "valor": 12.66
+    },
+    {
+     "ano": 1985,
+     "valor": 8.5
+    },
+    {
+     "ano": 1986,
+     "valor": 11.01
+    },
+    {
+     "ano": 1987,
+     "valor": 14.94
+    },
+    {
+     "ano": 1988,
+     "valor": 16.5
+    },
+    {
+     "ano": 1989,
+     "valor": 20.27
+    },
+    {
+     "ano": 1990,
+     "valor": 22.85
+    },
+    {
+     "ano": 1991,
+     "valor": 21.24
+    },
+    {
+     "ano": 1992,
+     "valor": 24.68
+    },
+    {
+     "ano": 1993,
+     "valor": 20.05
+    },
+    {
+     "ano": 1994,
+     "valor": 21.64
+    },
+    {
+     "ano": 1995,
+     "valor": 25.27
+    },
+    {
+     "ano": 1996,
+     "valor": 22.14
+    },
+    {
+     "ano": 1997,
+     "valor": 24.2
+    },
+    {
+     "ano": 1998,
+     "valor": 26.11
+    },
+    {
+     "ano": 1999,
+     "valor": 19.38
+    },
+    {
+     "ano": 2000,
+     "valor": 7.38
+    },
+    {
+     "ano": 2001,
+     "valor": 4.32
+    },
+    {
+     "ano": 2002,
+     "valor": 1.72
+    }
+   ]
+  },
+  {
+   "rotulo": "BRASIL - meningite por Hib em crianças de 1 a 4 anos, série nacional anual 1983-2002",
+   "unidade": "casos por 100.000 crianças de 1 a 4 anos",
+   "fonte_url": "https://www.scielo.br/j/rsbmt/a/JrfMB3xtKG4pHd6JT8VRpvj/?lang=pt",
+   "marco_vacina": 1999,
+   "pontos": [
+    {
+     "ano": 1983,
+     "valor": 2.17
+    },
+    {
+     "ano": 1984,
+     "valor": 2.66
+    },
+    {
+     "ano": 1985,
+     "valor": 1.51
+    },
+    {
+     "ano": 1986,
+     "valor": 2.26
+    },
+    {
+     "ano": 1987,
+     "valor": 2.81
+    },
+    {
+     "ano": 1988,
+     "valor": 3.65
+    },
+    {
+     "ano": 1989,
+     "valor": 4.46
+    },
+    {
+     "ano": 1990,
+     "valor": 4.77
+    },
+    {
+     "ano": 1991,
+     "valor": 4.85
+    },
+    {
+     "ano": 1992,
+     "valor": 4.96
+    },
+    {
+     "ano": 1993,
+     "valor": 4.37
+    },
+    {
+     "ano": 1994,
+     "valor": 4.51
+    },
+    {
+     "ano": 1995,
+     "valor": 5.31
+    },
+    {
+     "ano": 1996,
+     "valor": 4.74
+    },
+    {
+     "ano": 1997,
+     "valor": 5.85
+    },
+    {
+     "ano": 1998,
+     "valor": 5.41
+    },
+    {
+     "ano": 1999,
+     "valor": 4.4
+    },
+    {
+     "ano": 2000,
+     "valor": 1.85
+    },
+    {
+     "ano": 2001,
+     "valor": 0.88
+    },
+    {
+     "ano": 2002,
+     "valor": 0.3
+    }
+   ]
+  },
+  {
+   "rotulo": "BRASIL - mortalidade por meningite por Hib em menores de 1 ano, série nacional anual 1983-2002",
+   "unidade": "óbitos por 100.000 crianças menores de 1 ano",
+   "fonte_url": "https://www.scielo.br/j/rsbmt/a/JrfMB3xtKG4pHd6JT8VRpvj/?lang=pt",
+   "marco_vacina": 1999,
+   "pontos": [
+    {
+     "ano": 1983,
+     "valor": 2.47
+    },
+    {
+     "ano": 1984,
+     "valor": 3.64
+    },
+    {
+     "ano": 1985,
+     "valor": 2.09
+    },
+    {
+     "ano": 1986,
+     "valor": 2.92
+    },
+    {
+     "ano": 1987,
+     "valor": 3.33
+    },
+    {
+     "ano": 1988,
+     "valor": 3.73
+    },
+    {
+     "ano": 1989,
+     "valor": 4.53
+    },
+    {
+     "ano": 1990,
+     "valor": 5
+    },
+    {
+     "ano": 1991,
+     "valor": 3.81
+    },
+    {
+     "ano": 1992,
+     "valor": 5.81
+    },
+    {
+     "ano": 1993,
+     "valor": 4.19
+    },
+    {
+     "ano": 1994,
+     "valor": 5.15
+    },
+    {
+     "ano": 1995,
+     "valor": 4.87
+    },
+    {
+     "ano": 1996,
+     "valor": 4.25
+    },
+    {
+     "ano": 1997,
+     "valor": 4.49
+    },
+    {
+     "ano": 1998,
+     "valor": 4.59
+    },
+    {
+     "ano": 1999,
+     "valor": 3.35
+    },
+    {
+     "ano": 2000,
+     "valor": 1.43
+    },
+    {
+     "ano": 2001,
+     "valor": 0.83
+    },
+    {
+     "ano": 2002,
+     "valor": 0
+    }
+   ]
+  },
+  {
+   "rotulo": "BRASIL (Rio Grande do Sul) - meningite por Hib, população geral - SÓ 3 PONTOS",
+   "unidade": "casos por 100.000 habitantes (todas as idades, estado do RS)",
+   "fonte_url": "https://www.scielo.br/j/jped/a/PPf6B9VF5ND6pN5CTzyTqJf/?lang=pt",
+   "marco_vacina": 1999,
+   "pontos": [
+    {
+     "ano": 1995,
+     "valor": 1.35
+    },
+    {
+     "ano": 2000,
+     "valor": 0.31
+    },
+    {
+     "ano": 2001,
+     "valor": 0.15
+    }
+   ]
+  },
+  {
+   "rotulo": "BRASIL - meningite por Haemophilus influenzae (TODOS os sorotipos, inclusive não tipáveis), população geral, dado recente do Ministério da Saúde - SÓ 2 PONTOS",
+   "unidade": "número absoluto de casos confirmados por ano",
+   "fonte_url": "https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/notas-tecnicas/2024/nota-tecnica-conjunta-no-154-2024-dpni-svsa-ms.pdf",
+   "pontos": [
+    {
+     "ano": 2019,
+     "valor": 169
+    },
+    {
+     "ano": 2023,
+     "valor": 174
+    }
+   ]
+  },
+  {
+   "rotulo": "MUNDO - mortes por Hib em crianças de 1 a 59 meses HIV-negativas (estimativa OMS/Johns Hopkins) - SÓ 2 PONTOS",
+   "unidade": "número absoluto de óbitos por ano",
+   "fonte_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6005122/",
+   "pontos": [
+    {
+     "ano": 2000,
+     "valor": 299000
+    },
+    {
+     "ano": 2015,
+     "valor": 29500
+    }
+   ]
+  }
+ ],
+ "observacoes": "SÉRIE MAIS ADEQUADA PARA UM GRÁFICO DRAMÁTICO E HONESTO: a série \"BRASIL - meningite por Hib em menores de 1 ano, 1983-2002\" (Miranzi, Moraes & Freitas, Rev Soc Bras Med Trop 2006;39(5):473-477, dados FUNASA/notificação compulsória, denominadores IBGE). É a melhor porque: (a) tem 20 pontos ANUAIS, não dois pontos escolhidos a dedo; (b) é nacional, de fonte única, unidade única; (c) mostra a curva SUBINDO de 1983 a 1998 (10,05 -> 26,11/100 mil) e depois um penhasco a partir de 1999 (19,38 -> 7,38 -> 4,32 -> 1,72), o que torna implausível atribuir a queda a \"melhoria geral de saneamento/nutrição\" - a queda começa exatamente no semestre da vacina; (d) o próprio artigo mostra a mesma inflexão na mortalidade e em 1-4 anos (faixa parcialmente não vacinada, efeito de rebanho). Sugestão de arte: linha de <1 ano em destaque, linha de 1-4 anos em tom mais claro, faixa vertical em 1999 rotulada \"vacina conjugada Hib entra no PNI (2º semestre/1999)\".\n\nCAVEATS QUE VOCÊ DEVE DIZER NO SLIDE OU NA FALA (para não virar gráfico desonesto):\n- Brasil 1983-2002: no Brasil só a MENINGITE por Hib é de notificação compulsória; pneumonia e outras doenças invasivas não entram. Portanto o gráfico subestima a doença invasiva total. O ano de 2002 no artigo está claramente incompleto (mortalidade e letalidade aparecem como 0,00 em todas as faixas), então é prudente encerrar o gráfico em 2001 ou marcar 2002 como \"dado preliminar\". Os próprios autores levantam que parte da subida até 1995 pode refletir melhora diagnóstica (casos antes classificados como \"provável\" passaram a ser confirmados) - vale dizer isso se alguém questionar.\n- EUA série NNDSS (41 -> 1,3): é a mais dramática em magnitude (queda de 97%) mas é a MENOS limpa. Dois problemas reais: (1) é \"H. influenzae invasiva, todos os sorotipos\" e não Hib confirmado - antes da vacina >95% era Hib, o que salva o uso, mas o rótulo tem de ser honesto; (2) a cobertura da vigilância mudou muito (1987 = 7 estados, ~2,4 milhões de crianças; 1993 = 48 estados, ~18 milhões), e as taxas de 1987-1990 foram ajustadas por raça com a população de 1990. Se quiser Hib confirmado e sistema constante, use a série de vigilância ativa laboratorial: 34/100 mil (1989) -> 0,4/100 mil (1997), queda de 99% - são SÓ 2 PONTOS, e eu declaro isso.\n- Pontos EUA adicionais com fonte, se precisar: início dos anos 1980, pré-vacina, estimativa de ~20.000 casos/ano nos EUA e 40 a 50 casos por 100.000 em menores de 5 anos (CDC Pink Book, cap. 8: https://www.cdc.gov/pinkbook/hcp/table-of-contents/chapter-8-haemophilus-influenzae.html); 1993 = 2,4 e 1994 = 1,7 por 100 mil <5 vêm do MMWR de 28/07/1995, vol. 44 nº 29, p. 545-550 (https://www.cdc.gov/mmwr/PDF/wk/mm4429.pdf), os demais pontos da série vêm do MMWR 47(46), 27/11/1998. Piso atual: incidência média de Hib em menores de 5 anos de 0,14 casos/100.000 entre 2015 e 2022 (CDC, Manual for the Surveillance of Vaccine-Preventable Diseases, cap. 2: https://www.cdc.gov/surv-manual/php/table-of-contents/chapter-2-haemophilus-influenzae.html). O Pink Book traz 0,08 por 100.000 em menores de 5 anos em 2018, mas o texto do próprio capítulo é ambíguo sobre ser \"todos os sorotipos\" ou só Hib - não usei como ponto de série por isso. Não misturei nada disso na mesma série do NNDSS.\n- MARCO DA VACINA NOS EUA - não é um ano só, e isso importa: a vacina polissacarídica (não conjugada, ineficaz em lactentes) é de 1985; a primeira CONJUGADA foi licenciada em dezembro de 1987 apenas para crianças de 18 meses ou mais; só em outubro de 1990 foi licenciada para lactentes a partir de 2 meses e entrou na rotina infantil. Coloquei 1990 no campo \"marco_vacina\" porque é a inflexão real da curva, mas o slide honesto marca as duas datas (1987 e 1990). É por isso que a queda nos EUA é escalonada e não instantânea.\n- MUNDO: usei Wahl B, O'Brien KL, Greenbaum A, et al. Lancet Glob Health 2018;6(7):e744-e757 (estimativas OMS/Johns Hopkins, crianças de 1-59 meses HIV-negativas): 299.000 óbitos por Hib em 2000 (intervalo de incerteza 186.000-412.000) e 29.500 em 2015 (IU 18.400-40.700) - queda de 90% (78-96%). Casos em 2015: 975.000 (IU 870.000-1.590.000); o mesmo artigo estima ~1,2 milhão de mortes evitadas pela vacina Hib no período 2000-2015, e a expansão foi de 60 países com vacina Hib em 2000 para 192 em 2015. NÃO misture com Watt JP et al., Lancet 2009;374(9693):903-911, que estimou para o ano 2000 cerca de 8,13 milhões de casos graves e 371.000 mortes por Hib em menores de 5 anos - é outra metodologia e outro número para o mesmo ano (371.000 vs 299.000); se citar, cite como estimativa alternativa, em caixa separada. São só 2 pontos na série mundial (2000 e 2015); não existe série anual publicada confiável nesse formato.\n- BRASIL, DADO MAIS RECENTE E O AUMENTO DOS NÃO TIPÁVEIS - sim, existe, e é uma virada importante do slide: a Nota Técnica Conjunta nº 154/2024-DPNI/SVSA/MS afirma literalmente que \"tem sido observado um aumento na prevalência de casos de meningite e bacteremia por sorotipos não b, com destaque para sorotipo a, e por Hi não tipáveis\" e que \"No Brasil, de 2009 a 2021, a maioria dos casos identificados de DIHi foram por cepas não tipáveis, seguido dos sorotipos a e b\". Na mesma nota, a meningite por H. influenzae (todos os tipos) teve média de 137 casos/ano na população geral entre 2010 e 2023 (excluindo 2020-2021 pela pandemia) e média de 76 casos/ano em menores de 5 anos; os anos de maior número foram 2019 (169 casos gerais, 96 em <5 anos) e 2023 (174 casos gerais, o maior da série); até a SE 35 de 2024 havia 110 casos gerais e 48 em <5 anos. Ou seja: o número de meningites por \"Haemophilus influenzae\" no Brasil hoje é estável ou levemente crescente, mas isso NÃO é falha da vacina - é troca de agente, de Hib para não tipáveis e sorotipo a, que a vacina não cobre. Os dados do ABCs nos EUA mostram exatamente o mesmo padrão e eu incluí as duas séries lado a lado para você poder mostrar isso: Hib cai de 0,30 (1997) para 0,03/100 mil (2024) enquanto o não tipável sobe de 0,54 (1997) para 1,82-1,93/100 mil (2023-2024). ATENÇÃO: as duas séries do ABCs são de TODAS AS IDADES, não de menores de 5 anos - não as rotule como infantis. As quedas de 2020-2021 nessas séries são artefato da pandemia (menos circulação e menos busca diagnóstica), não efeito de vacina.\n- Corroboração brasileira regional, se quiser uma segunda fonte no slide: Simões LLP, Andrade ALSS, Laval CA, et al. Rev Saude Publica 2004;38(5) - Goiás, meningite por Hib em menores de 5 anos caiu de 10,8 por 100.000 no período pré-vacinal (jul/1995-jun/1999) para 2,3 por 100.000 no segundo ano pós-vacina (jul/2000-jun/2001), redução de 78% de risco, com 65 casos evitados (https://www.scielo.br/j/rsp/a/NSsgKR6BZxSRJkgmpj6mR6q/?lang=pt). No RS, além dos 3 pontos da série, Kmetzsch et al. (J Pediatr (Rio J) 2003;79(6)) reportam queda de 36,5 para 3,4 por 100.000 em menores de 1 ano e de 6,4 para 0,7 em 1-4 anos, mas esses são MÉDIAS DE PERÍODO (1995-1998 vs pós-1999), não anos isolados - não use como pontos anuais. A letalidade da meningite por Hib no RS caiu de 17,8% para 6,7%.\n- Uma checagem que eu descartei: uma busca inicial devolveu \"1,42 casos por 100.000 habitantes menores de cinco anos em 2023\" como se fosse Haemophilus. Fui ao PDF original da Nota Técnica 154/2024 e esse 1,42 é de DOENÇA MENINGOCÓCICA, não de Haemophilus. Não use. Também não encontrei, nas fontes oficiais do Ministério da Saúde, uma série nacional anual publicada de INCIDÊNCIA (por 100 mil) de meningite por Hib depois de 2002 - o que existe publicado de 2010 em diante é número absoluto de casos de H. influenzae de todos os tipos. Se precisar de incidência brasileira recente, o caminho é extrair do Painel de Meningites/SINAN (https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/m/meningite/situacao-epidemiologica), mas aí o número seria calculado por nós e não citável como publicado."
+}

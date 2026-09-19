@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haemophilus influenzae — cocobacilo (variante B / shader GLSL)</title>
+<style>
+  /* ---- Direcao de arte: fundo quase preto, objeto e a unica coisa iluminada ---- */
+  html, body { margin:0; padding:0; height:100%; background:#07090C; overflow:hidden; }
+  canvas { display:block; }
+  #hud {
+    position:fixed; top:16px; left:16px; z-index:10;
+    font:11px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color:#9fd9d6; letter-spacing:.06em;
+    background:rgba(7,12,16,.62); border:1px solid rgba(34,232,224,.18);
+    border-radius:10px; padding:14px 16px 12px; width:214px;
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    box-shadow:0 20px 50px rgba(0,0,0,.6), inset 0 1px 0 rgba(34,232,224,.08);
+  }
+  #hud h1 { margin:0 0 10px; font-size:10px; font-weight:600; color:#22E8E0;
+            text-transform:uppercase; letter-spacing:.16em; }
+  #hud .row { display:flex; align-items:center; justify-content:space-between; margin:9px 0; }
+  #hud label { cursor:pointer; user-select:none; }
+  #hud input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:2px;
+    background:linear-gradient(90deg,#22E8E0,rgba(34,232,224,.15)); border-radius:2px; margin:4px 0 2px; }
+  #hud input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:11px; height:11px;
+    border-radius:50%; background:#07090C; border:1.5px solid #22E8E0; box-shadow:0 0 8px #22E8E0; cursor:pointer; }
+  #hud input[type=range]::-moz-range-thumb { width:10px; height:10px; border-radius:50%;
+    background:#07090C; border:1.5px solid #22E8E0; cursor:pointer; }
+  #hud input[type=checkbox] { accent-color:#22E8E0; width:13px; height:13px; cursor:pointer; }
+  #hud .val { color:#6f8f92; font-size:10px; }
+  #hud hr { border:0; border-top:1px solid rgba(34,232,224,.12); margin:12px 0 10px; }
+  #hud .camada { display:flex; align-items:center; gap:7px; margin:5px 0; color:#7fa9a9; font-size:10px; }
+  #hud .dot { width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
+  #caption {
+    position:fixed; left:18px; bottom:16px; z-index:10; pointer-events:none;
+    font:11px/1.7 ui-monospace, Menlo, Consolas, monospace; color:#4e6b70; letter-spacing:.1em;
+  }
+  #caption b { color:#22E8E0; font-weight:500; font-style:italic; letter-spacing:.06em; }
+  /* vinheta: foco no objeto, cantos mortos */
+  #vinheta { position:fixed; inset:0; z-index:5; pointer-events:none;
+    background:radial-gradient(ellipse 78% 74% at 50% 48%,
+      rgba(0,0,0,0) 0%, rgba(0,0,0,.10) 70%, rgba(0,0,0,.48) 100%); }
+  #erro { position:fixed; inset:0; display:none; place-items:center; z-index:50;
+    font:13px/1.6 ui-monospace,monospace; color:#ff8080; background:#07090C; padding:40px;
+    white-space:pre-wrap; text-align:left; }
+</style>
+</head>
+<body>
+
+<!-- ---------- Controles (HTML puro, sem lib de UI) ---------- -->
+<div id="hud">
+  <h1>H. influenzae · Hib</h1>
+
+  <div class="row"><label for="cCap">cápsula (PRP)</label><input type="checkbox" id="cCap" checked></div>
+  <div class="row"><label for="cFim">fímbrias / pili</label><input type="checkbox" id="cFim" checked></div>
+
+  <hr>
+
+  <div class="row"><span>vista explodida</span><span class="val" id="vExp">0.00</span></div>
+  <input type="range" id="rExp" min="0" max="1" step="0.01" value="0">
+
+  <div class="row"><span>intensidade do brilho</span><span class="val" id="vGlow">1.00</span></div>
+  <input type="range" id="rGlow" min="0" max="2" step="0.01" value="1">
+
+  <div class="row"><span>velocidade de rotação</span><span class="val" id="vSpd">0.22</span></div>
+  <input type="range" id="rSpd" min="0" max="1" step="0.01" value="0.22">
+
+  <hr>
+  <div class="camada"><span class="dot" style="background:#0d6f7a"></span>corpo / citoplasma</div>
+  <div class="camada"><span class="dot" style="background:#22E8E0"></span>membrana externa</div>
+  <div class="camada"><span class="dot" style="background:#9df2ff"></span>cápsula polissacarídica</div>
+  <div class="camada"><span class="dot" style="background:#7fe8ff"></span>fímbrias</div>
+</div>
+
+<div id="caption">
+  <b>Haemophilus influenzae</b><br>
+  cocobacilo gram-negativo · 0,3–0,5 × 0,5–3 µm<br>
+  imóvel · sem flagelo · não formador de esporo
+</div>
+
+<div id="vinheta"></div>
+<div id="erro"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer }   from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }       from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass }  from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass }       from 'three/addons/postprocessing/OutputPass.js';
+
+// mostra erro na tela em vez de ficar preto silencioso
+window.addEventListener('error', e => {
+  const d = document.getElementById('erro');
+  d.style.display = 'grid';
+  d.textContent = 'ERRO: ' + (e.message || e) + '\n' + (e.filename || '');
+});
+
+/* ============================================================
+   1. RUIDO GLSL (simplex 3D) — usado em todos os shaders
+   ============================================================ */
+const NOISE = /* glsl */`
+vec3 mod289v3(vec3 x){ return x - floor(x * (1.0/289.0)) * 289.0; }
+vec4 mod289v4(vec4 x){ return x - floor(x * (1.0/289.0)) * 289.0; }
+vec4 permute(vec4 x){ return mod289v4(((x*34.0)+1.0)*x); }
+vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }
+
+float snoise(vec3 v){
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i  = floor(v + dot(v, C.yyy));
+  vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy);
+  vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy;
+  vec3 x3 = x0 - D.yyy;
+  i = mod289v3(i);
+  vec4 p = permute( permute( permute(
+             i.z + vec4(0.0, i1.z, i2.z, 1.0))
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+           + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 0.142857142857;
+  vec3 ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_);
+  vec4 xx = x_ * ns.x + ns.yyyy;
+  vec4 yy = y_ * ns.x + ns.yyyy;
+  vec4 h  = 1.0 - abs(xx) - abs(yy);
+  vec4 b0 = vec4( xx.xy, yy.xy );
+  vec4 b1 = vec4( xx.zw, yy.zw );
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy, h.x);
+  vec3 p1 = vec3(a0.zw, h.y);
+  vec3 p2 = vec3(a1.xy, h.z);
+  vec3 p3 = vec3(a1.zw, h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 42.0 * dot( m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)) );
+}
+
+// fbm de 3 oitavas
+float fbm3(vec3 p){
+  float s = 0.0, a = 0.5;
+  for(int i = 0; i < 3; i++){ s += a * snoise(p); p *= 2.03; a *= 0.5; }
+  return s;
+}
+
+// tangente estavel a partir da normal (evita cross degenerado)
+void baseTangente(vec3 n, out vec3 t1, out vec3 t2){
+  vec3 ref = mix(vec3(0.0,1.0,0.0), vec3(1.0,0.0,0.0), step(0.9, abs(n.y)));
+  t1 = normalize(cross(n, ref));
+  t2 = cross(n, t1);
+}
+`;
+
+/* ============================================================
+   2. GEOMETRIA PROCEDURAL — cocobacilo (capsula de revolucao)
+   Eixo longo = X. Parametrizacao por comprimento de arco do
+   perfil (calota + cilindro + calota) => malha bem distribuida.
+   Normais analiticas (exatas), sem polos degenerados.
+   ============================================================ */
+function criaCocobacilo(opt){
+  const r      = opt.raio;             // raio (metade da largura)
+  const h      = opt.meioCil;          // metade do cilindro central
+  const cintura= opt.cintura || 0.0;   // 0 = celula unica; >0 = halter (divisao binaria)
+  const irreg  = (opt.irreg === undefined) ? 0.035 : opt.irreg; // leve irregularidade organica
+  const semente= opt.semente || 1.0;
+  const NV = opt.segV || 170;          // ao longo do eixo
+  const NU = opt.segU || 100;          // ao redor
+
+  const Lperfil = Math.PI * r + 2 * h; // arco total do perfil
+  const pos = [], nor = [], uvs = [], idx = [];
+
+  // ruido de valor 3D simples (JS) para a silhueta pleomorfica
+  const hash = (x, y, z) => {
+    const s = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719 + semente * 45.164) * 43758.5453;
+    return s - Math.floor(s);
+  };
+  const vnoise = (x, y, z) => {
+    const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+    const xf = x - xi, yf = y - yi, zf = z - zi;
+    const sm = t => t * t * (3 - 2 * t);
+    const u = sm(xf), v = sm(yf), w = sm(zf);
+    let acc = 0;
+    for (let dz = 0; dz < 2; dz++) for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) {
+      const wgt = (dx ? u : 1 - u) * (dy ? v : 1 - v) * (dz ? w : 1 - w);
+      acc += wgt * hash(xi + dx, yi + dy, zi + dz);
+    }
+    return acc * 2 - 1;
+  };
+
+  for (let iv = 0; iv <= NV; iv++) {
+    const t = iv / NV;
+    const s = t * Lperfil;
+    let x, rad, nx, nr;                // nx / nr = normal (axial / radial)
+    const arco = Math.PI * r * 0.5;
+    if (s < arco) {                    // calota esquerda
+      const a = s / r;                 // 0 .. pi/2
+      x = -h - r * Math.cos(a); rad = r * Math.sin(a);
+      nx = -Math.cos(a);               nr = Math.sin(a);
+    } else if (s < arco + 2 * h) {     // cilindro central (curto!)
+      x = -h + (s - arco); rad = r;
+      nx = 0.0; nr = 1.0;
+    } else {                           // calota direita
+      const a = (s - arco - 2 * h) / r;
+      x = h + r * Math.sin(a); rad = r * Math.cos(a);
+      nx = Math.sin(a);                nr = Math.cos(a);
+    }
+
+    // halter da divisao binaria: estrangula o meio
+    if (cintura > 0.0) {
+      const k = Math.exp(-(x * x) / (0.18 * (h + r) * (h + r)));
+      rad *= (1.0 - cintura * k);
+    }
+
+    for (let iu = 0; iu <= NU; iu++) {
+      const u = iu / NU, ang = u * Math.PI * 2.0;
+      const cy = Math.cos(ang), cz = Math.sin(ang);
+      // variacao de baixa frequencia: superficie lisa, sem espinhos
+      const w = 1.0 + irreg * vnoise(x * 1.9 + 3.1, cy * 1.9 + 1.7, cz * 1.9 + 8.3);
+      pos.push(x, rad * cy * w, rad * cz * w);
+      nor.push(nx, nr * cy, nr * cz);
+      uvs.push(u, t);
+    }
+  }
+  const linha = NU + 1;
+  for (let iv = 0; iv < NV; iv++) for (let iu = 0; iu < NU; iu++) {
+    const a = iv * linha + iu, b = a + 1, c = a + linha, d = c + 1;
+    idx.push(a, b, c, b, d, c);   // winding CCW visto de fora (normal para fora)
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('normal',   new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute('uv',       new THREE.Float32BufferAttribute(uvs, 2));
+  g.setIndex(idx);
+  g.computeBoundingSphere();
+  return g;
+}
+
+// ponto + normal na superficie do cocobacilo (para plantar fimbrias)
+function pontoNaSuperficie(r, h, t, ang){
+  const L = Math.PI * r + 2 * h, s = t * L, arco = Math.PI * r * 0.5;
+  let x, rad, nx, nr;
+  if (s < arco)               { const a = s / r;               x = -h - r*Math.cos(a); rad = r*Math.sin(a); nx = -Math.cos(a); nr = Math.sin(a); }
+  else if (s < arco + 2*h)    {                                x = -h + (s - arco);    rad = r;             nx = 0;            nr = 1; }
+  else                        { const a = (s-arco-2*h)/r;      x =  h + r*Math.sin(a); rad = r*Math.cos(a); nx =  Math.sin(a); nr = Math.cos(a); }
+  const cy = Math.cos(ang), cz = Math.sin(ang);
+  return {
+    p: new THREE.Vector3(x, rad * cy, rad * cz),
+    n: new THREE.Vector3(nx, nr * cy, nr * cz).normalize()
+  };
+}
+
+/* ============================================================
+   3. CENA
+   ============================================================ */
+const cena = new THREE.Scene();
+cena.background = new THREE.Color('#07090C');
+
+const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(0, 0.32, 4.4);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));   // trava o DPR em 2
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;  // evita estourar em branco
+renderer.toneMappingExposure = 1.0;
+document.body.appendChild(renderer.domElement);
+
+// luzes (apenas uniforms — toda a iluminacao e feita no shader)
+const LUZ_KEY  = new THREE.Vector3(-0.55, 0.78, 0.62).normalize(); // principal
+const LUZ_BACK = new THREE.Vector3( 0.48, 0.22,-0.92).normalize(); // contorno atras
+
+const CIANO  = new THREE.Color('#22E8E0');
+const PROFUN = new THREE.Color('#05202a');
+const MEIO   = new THREE.Color('#14bdb6');
+const CLARO  = new THREE.Color('#bdfbff');
+
+const uComuns = {
+  uTime:    { value: 0 },
+  uGlow:    { value: 1 },
+  uCamPos:  { value: new THREE.Vector3() },
+  uKey:     { value: LUZ_KEY },
+  uBack:    { value: LUZ_BACK }
+};
+
+/* ---------- 3.1 SHADER DO CORPO / CITOPLASMA ----------
+   vertex: deslocamento por ruido + normal reconstruida
+   fragment: fresnel, falso subsurface, granulacao tipo MEV     */
+const VS_CORPO = /* glsl */`
+uniform float uTime, uAmp, uFreq;
+varying vec3 vN, vNg, vWP, vOP;   // vN = com relevo | vNg = geometrica lisa
+varying float vLobo;
+${NOISE}
+float desloc(vec3 p){
+  return fbm3(p * uFreq + vec3(0.0, 0.0, uTime * 0.035));
+}
+void main(){
+  vec3 p = position;
+  vec3 n = normalize(normal);
+  vec3 t1, t2; baseTangente(n, t1, t2);
+  float e  = 0.06;
+  float h0 = desloc(p);
+  float hA = desloc(p + t1 * e);
+  float hB = desloc(p + t2 * e);
+  vec3 dp = p + n * h0 * uAmp;                                  // superficie granulada
+  vec3 dn = normalize(n - (t1*(hA-h0) + t2*(hB-h0)) * (uAmp/e)); // normal coerente
+  vLobo = h0;
+  vOP = dp;
+  vec4 wp = modelMatrix * vec4(dp, 1.0);
+  vWP = wp.xyz;
+  vN  = normalize(mat3(modelMatrix) * dn);
+  vNg = normalize(mat3(modelMatrix) * n);
+  gl_Position = projectionMatrix * viewMatrix * wp;
+}
+`;
+
+const FS_CORPO = /* glsl */`
+uniform vec3  uCamPos, uKey, uBack, cProf, cMeio, cRim;
+uniform float uGlow, uGrainF, uGrainA, uTime, uDim;
+varying vec3 vN, vNg, vWP, vOP;
+varying float vLobo;
+${NOISE}
+void main(){
+  vec3 Ng = normalize(vNg);                        // lisa: silhueta e reflexo
+  vec3 Nb = normalize(vN);                         // com relevo organico
+  vec3 V  = normalize(uCamPos - vWP);
+
+  // --- granulacao fina de MEV: normal perturbada so para o difuso ---
+  vec3 t1, t2; baseTangente(Nb, t1, t2);
+  float d = 0.012;
+  float g0 = snoise(vOP * uGrainF);
+  float g1 = snoise((vOP + t1 * d) * uGrainF);
+  float g2 = snoise((vOP + t2 * d) * uGrainF);
+  vec3 N = normalize(Nb - (t1*(g1-g0) + t2*(g2-g0)) * uGrainA);
+
+  float NdV  = clamp(dot(Ng, V), 0.0, 1.0);
+  float fres = pow(1.0 - NdV, 3.0);
+
+  float difu = max(dot(N,  uKey), 0.0);            // luz principal + textura
+  float ndlS = dot(Ng, uKey);
+  float wrap = max((ndlS + 0.50) / 1.50, 0.0);     // falso subsurface
+  float sss  = pow(wrap, 2.2);
+
+  // contra-luz: rim light atras, desenha o contorno
+  float rimB = pow(max(dot(Ng, uBack), 0.0), 1.5) * pow(1.0 - NdV, 1.5);
+
+  // especular de estudio: risco fino (softbox) quebrado pelo relevo organico
+  vec3  Hv   = normalize(uKey + V);
+  float sh   = max(dot(Nb, Hv), 0.0);
+  float spec = pow(sh, 22.0) * 0.030 + pow(sh, 520.0) * 0.30;
+
+  // manchado de baixa frequencia + grao fino (textura de micrografia)
+  float mott  = 0.5 + 0.5 * fbm3(vOP * 3.4);
+  float grain = 0.5 + 0.5 * g0;
+
+  // corpo escuro, luz concentrada: gradiente de estudio + contorno
+  spec *= (0.65 + 0.70 * mott);                    // realce irregular, nao uniforme
+
+  // ambiente hemisferico frio: ceu acima, chao quase morto abaixo
+  vec3 amb = mix(vec3(0.003, 0.014, 0.022), vec3(0.010, 0.050, 0.062), 0.5 + 0.5 * Nb.y);
+
+  vec3 col = cProf * 0.22
+           + amb   * 1.15
+           + cMeio * pow(difu, 1.30) * (0.24 + 0.38 * grain) * (0.60 + 0.70 * mott)
+           + cMeio * sss  * 0.085
+           + cRim  * fres * 0.78 * uGlow
+           + cRim  * rimB * 1.60 * uGlow
+           + vec3(0.48, 1.0, 1.0) * spec * uGlow;
+
+  col *= uDim;
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* ---------- 3.2 SHADER DA MEMBRANA EXTERNA ----------
+   pele lisa e translucida, fresnel forte e reflexo sutil        */
+const VS_LISO = /* glsl */`
+uniform float uTime, uAmp, uFreq;
+varying vec3 vN, vNg, vWP, vOP;
+${NOISE}
+void main(){
+  vec3 p = position;
+  vec3 n = normalize(normal);
+  vec3 t1, t2; baseTangente(n, t1, t2);
+  float e = 0.08;
+  float h0 = snoise(p * uFreq + vec3(0.0, uTime * 0.03, 0.0));
+  float hA = snoise((p + t1 * e) * uFreq + vec3(0.0, uTime * 0.03, 0.0));
+  float hB = snoise((p + t2 * e) * uFreq + vec3(0.0, uTime * 0.03, 0.0));
+  vec3 dp = p + n * h0 * uAmp;
+  vec3 dn = normalize(n - (t1*(hA-h0) + t2*(hB-h0)) * (uAmp/e));
+  vOP = dp;
+  vec4 wp = modelMatrix * vec4(dp, 1.0);
+  vWP = wp.xyz;
+  vN  = normalize(mat3(modelMatrix) * dn);
+  vNg = normalize(mat3(modelMatrix) * n);
+  gl_Position = projectionMatrix * viewMatrix * wp;
+}
+`;
+
+const FS_MEMBRANA = /* glsl */`
+uniform vec3  uCamPos, uKey, uBack, cRim, cMeio;
+uniform float uGlow, uOpac, uDim;
+varying vec3 vN, vNg, vWP, vOP;
+${NOISE}
+void main(){
+  vec3 N = normalize(vNg);
+  vec3 V = normalize(uCamPos - vWP);
+  float NdV  = clamp(dot(N, V), 0.0, 1.0);
+  float fres = pow(1.0 - NdV, 2.6);
+
+  float ndl  = dot(N, uKey);
+  float difu = max(ndl, 0.0);
+  float rimB = pow(max(dot(N, uBack), 0.0), 1.3) * pow(1.0 - NdV, 1.1);
+
+  vec3  Hv   = normalize(uKey + V);
+  float spec = pow(max(dot(N, Hv), 0.0), 260.0) * 1.6;
+
+  // faixas finissimas de anisotropia -> leitura de membrana, nao de bala de goma
+  float band = 0.5 + 0.5 * snoise(vOP * vec3(22.0, 7.0, 7.0));
+
+  vec3 col = cRim  * fres * 1.28 * uGlow
+           + cMeio * difu * 0.16
+           + cRim  * rimB * 0.95 * uGlow
+           + vec3(0.7, 1.0, 1.0) * spec * 0.6 * uGlow;
+  col *= (0.9 + 0.2 * band);
+  col *= uDim;
+
+  float a = clamp((0.045 + 0.72 * fres + 0.09 * difu) * uOpac, 0.0, 1.0);
+  gl_FragColor = vec4(col, a);
+}
+`;
+
+/* ---------- 3.3 SHADER DA CAPSULA (bolha de sabao) ----------
+   fresnel invertido: opaca nas bordas, quase invisivel no centro */
+const FS_CAPSULA = /* glsl */`
+uniform vec3  uCamPos, uKey, uBack, cRim;
+uniform float uGlow, uOpac, uTime, uDim;
+varying vec3 vN, vNg, vWP, vOP;
+${NOISE}
+void main(){
+  vec3 N = normalize(vNg);
+  N *= gl_FrontFacing ? 1.0 : -1.0;           // casca dupla face
+  vec3 V = normalize(uCamPos - vWP);
+  float NdV  = clamp(dot(N, V), 0.0, 1.0);
+  float fres = pow(1.0 - NdV, 3.0);
+
+  // espessura do filme variando suave -> iridescencia discreta
+  float th  = 0.5 + 0.5 * snoise(vOP * 1.7 + vec3(0.0, uTime * 0.04, 0.0));
+  vec3  iri = 0.5 + 0.5 * cos(6.28318 * (vec3(0.00, 0.28, 0.58) + th * 0.35 + fres * 0.45));
+
+  float rimB = pow(max(dot(N, uBack), 0.0), 1.2) * fres;
+  vec3  Hv   = normalize(uKey + V);
+  float spec = pow(max(dot(N, Hv), 0.0), 420.0) * 1.3;
+
+  vec3 col = mix(cRim, cRim * 0.72 + iri * 0.30, 0.40) * (0.05 + 0.60 * fres) * uGlow
+           + cRim * rimB * 0.28 * uGlow
+           + vec3(0.85, 1.0, 1.0) * spec * 0.30 * uGlow;
+  col *= uDim;
+
+  // neblina de polissacarideo: o miolo nao fica preto, fica um gel tenue
+  float a = clamp((0.09 + 0.62 * fres) * uOpac, 0.0, 1.0);
+  gl_FragColor = vec4(col, a);
+}
+`;
+
+/* ---------- 3.4 SHADER DAS FIMBRIAS (gradiente ao longo do fio) ---------- */
+const VS_FIMBRIA = /* glsl */`
+varying vec2 vUv; varying vec3 vN, vWP;
+void main(){
+  vUv = uv;
+  vec4 wp = modelMatrix * vec4(position, 1.0);
+  vWP = wp.xyz;
+  vN  = normalize(mat3(modelMatrix) * normal);
+  gl_Position = projectionMatrix * viewMatrix * wp;
+}
+`;
+const FS_FIMBRIA = /* glsl */`
+uniform vec3 cRim, uCamPos; uniform float uGlow, uOpac;
+varying vec2 vUv; varying vec3 vN, vWP;
+void main(){
+  vec3 N = normalize(vN);
+  vec3 V = normalize(uCamPos - vWP);
+  float fres = pow(1.0 - clamp(abs(dot(N, V)), 0.0, 1.0), 1.5); // fio fino brilha de perfil
+  float base = pow(1.0 - vUv.x, 1.35);                          // gradiente base -> ponta
+  vec3 col = cRim * (0.30 + 0.85 * fres) * uGlow;
+  gl_FragColor = vec4(col, clamp(base * (0.26 + 0.60 * fres) * uOpac, 0.0, 1.0));
+}
+`;
+
+/* ============================================================
+   4. MONTAGEM DAS CAMADAS (objetos SEPARADOS e NOMEADOS)
+   ============================================================ */
+const R = 0.50, H = 0.55;   // -> comprimento 2.1 / largura 1.0  => cocobacilo ~2,1:1
+const pivo = new THREE.Group(); pivo.name = 'pivo'; cena.add(pivo);
+const celula = new THREE.Group(); celula.name = 'celula'; pivo.add(celula);
+
+function uniformsBase(extra){
+  return Object.assign({
+    uTime: uComuns.uTime, uGlow: uComuns.uGlow, uCamPos: uComuns.uCamPos,
+    uKey: uComuns.uKey, uBack: uComuns.uBack, uDim: { value: 1.0 }
+  }, extra);
+}
+
+// --- camada 1: corpo / citoplasma (opaca, granulada) ---
+const matCorpo = new THREE.ShaderMaterial({
+  vertexShader: VS_CORPO, fragmentShader: FS_CORPO,
+  uniforms: uniformsBase({
+    uAmp:    { value: 0.017 }, uFreq: { value: 5.2 },
+    uGrainF: { value: 58.0 },  uGrainA: { value: 0.13 },
+    cProf: { value: PROFUN }, cMeio: { value: MEIO }, cRim: { value: CIANO }
+  })
+});
+const citoplasma = new THREE.Mesh(criaCocobacilo({ raio: R * 0.93, meioCil: H * 0.95, irreg: 0.045, semente: 7.3 }), matCorpo);
+citoplasma.name = 'citoplasma';
+celula.add(citoplasma);
+
+// --- camada 2: membrana externa (translucida, rim light) ---
+const matMembrana = new THREE.ShaderMaterial({
+  vertexShader: VS_LISO, fragmentShader: FS_MEMBRANA,
+  uniforms: uniformsBase({
+    uAmp: { value: 0.012 }, uFreq: { value: 3.2 }, uOpac: { value: 1.0 },
+    cRim: { value: CIANO }, cMeio: { value: MEIO }
+  }),
+  transparent: true, depthWrite: false, side: THREE.FrontSide,
+  blending: THREE.AdditiveBlending          // casca de luz: soma, nunca escurece
+});
+const membrana = new THREE.Mesh(criaCocobacilo({ raio: R, meioCil: H, irreg: 0.030, semente: 2.1 }), matMembrana);
+membrana.name = 'membranaExterna';
+membrana.renderOrder = 2;
+celula.add(membrana);
+
+// --- camada 3: capsula de polissacarideo (translucida, lisa) ---
+const matCapsula = new THREE.ShaderMaterial({
+  vertexShader: VS_LISO, fragmentShader: FS_CAPSULA,
+  uniforms: uniformsBase({
+    uAmp: { value: 0.010 }, uFreq: { value: 2.2 }, uOpac: { value: 1.0 },
+    cRim: { value: new THREE.Color('#86f3ff') }
+  }),
+  transparent: true, depthWrite: false, side: THREE.DoubleSide,
+  blending: THREE.AdditiveBlending
+});
+const capsula = new THREE.Mesh(criaCocobacilo({ raio: R + 0.072, meioCil: H, irreg: 0.020, semente: 5.9, segV: 150, segU: 90 }), matCapsula);
+capsula.name = 'capsulaPolissacaridica';
+capsula.renderOrder = 3;
+celula.add(capsula);
+
+// --- camada 4: fimbrias / pili (finas, curtas, esparsas) ---
+const matFimbria = new THREE.ShaderMaterial({
+  vertexShader: VS_FIMBRIA, fragmentShader: FS_FIMBRIA,
+  uniforms: {
+    cRim: { value: new THREE.Color('#79e6f7') }, uCamPos: uComuns.uCamPos,
+    uGlow: uComuns.uGlow, uOpac: { value: 1.0 }
+  },
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+});
+const fimbrias = new THREE.Group();
+fimbrias.name = 'fimbrias';
+fimbrias.renderOrder = 4;
+celula.add(fimbrias);
+
+(function plantaFimbrias(){
+  const N = 16;                                   // poucas: esparsas, nao cabeleira
+  let seed = 11;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < N; i++) {
+    const t = 0.10 + rnd() * 0.80;
+    const { p, n } = pontoNaSuperficie(R, H, t, rnd() * Math.PI * 2);
+    const comp = 0.13 + rnd() * 0.11;             // curtas
+    // curva com leve curvatura lateral
+    const lat = new THREE.Vector3(rnd() - 0.5, rnd() - 0.5, rnd() - 0.5).normalize();
+    const pts = [];
+    for (let k = 0; k <= 5; k++) {
+      const f = k / 5;
+      pts.push(p.clone()
+        .addScaledVector(n, comp * f)
+        .addScaledVector(lat, comp * 0.85 * f * f));
+    }
+    const curva = new THREE.CatmullRomCurve3(pts);
+    const geo = new THREE.TubeGeometry(curva, 20, 0.0046, 5, false);
+    const fio = new THREE.Mesh(geo, matFimbria);
+    fio.name = 'fimbria_' + i;
+    fimbrias.add(fio);
+  }
+})();
+
+/* --- detalhe: celula em halter (divisao binaria), ao fundo, mais apagada --- */
+const halter = new THREE.Group(); halter.name = 'divisaoBinaria';
+const matHalterCorpo = matCorpo.clone();
+matHalterCorpo.uniforms.uDim.value = 0.55;
+const matHalterMemb = matMembrana.clone();
+matHalterMemb.uniforms.uDim.value = 0.50;
+matHalterMemb.uniforms.uOpac.value = 0.75;
+const gHalter = criaCocobacilo({ raio: 0.40, meioCil: 0.52, cintura: 0.34, irreg: 0.040, semente: 19.4, segV: 150, segU: 84 });
+const hCorpo = new THREE.Mesh(gHalter, matHalterCorpo); hCorpo.name = 'halter_citoplasma';
+const hMemb  = new THREE.Mesh(criaCocobacilo({ raio: 0.42, meioCil: 0.52, cintura: 0.33, irreg: 0.028, semente: 21.0, segV: 150, segU: 84 }), matHalterMemb);
+hMemb.name = 'halter_membrana'; hMemb.renderOrder = 2;
+halter.add(hCorpo, hMemb);
+halter.position.set(-3.05, -1.40, -5.4);
+halter.rotation.set(0.18, 0.0, 0.48);
+halter.scale.setScalar(0.54);
+cena.add(halter);                    // fora do pivo: nunca cruza a celula principal
+// devolve os uniforms compartilhados depois do clone
+matHalterCorpo.uniforms.uCamPos = uComuns.uCamPos;
+matHalterCorpo.uniforms.uTime   = uComuns.uTime;
+matHalterCorpo.uniforms.uGlow   = uComuns.uGlow;
+matHalterMemb.uniforms.uCamPos  = uComuns.uCamPos;
+matHalterMemb.uniforms.uTime    = uComuns.uTime;
+matHalterMemb.uniforms.uGlow    = uComuns.uGlow;
+
+/* --- reflexo sutil no "chao" de estudio --- */
+const reflexo = new THREE.Mesh(
+  new THREE.PlaneGeometry(6, 3),
+  new THREE.ShaderMaterial({
+    uniforms: { cRim: { value: CIANO }, uGlow: uComuns.uGlow },
+    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: `
+      uniform vec3 cRim; uniform float uGlow; varying vec2 vUv;
+      void main(){
+        vec2 q = (vUv - 0.5) * vec2(2.6, 5.2);
+        float d = 1.0 - clamp(length(q), 0.0, 1.0);
+        float a = pow(d, 3.2) * 0.10 * uGlow;
+        gl_FragColor = vec4(cRim * a, a);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  })
+);
+reflexo.name = 'reflexoEstudio';
+reflexo.rotation.x = -Math.PI / 2;
+reflexo.position.y = -0.78;
+cena.add(reflexo);
+
+/* --- poeira de fundo: profundidade de cena --- */
+(function poeira(){
+  const n = 320, arr = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    arr[i*3+0] = (Math.random() - 0.5) * 14;
+    arr[i*3+1] = (Math.random() - 0.5) * 8;
+    arr[i*3+2] = (Math.random() - 0.5) * 10 - 3;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
+  const m = new THREE.ShaderMaterial({
+    uniforms: { cRim: { value: CIANO }, uTime: uComuns.uTime },
+    vertexShader: `
+      uniform float uTime; varying float vF;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vF = 0.35 + 0.65 * abs(sin(uTime * 0.25 + position.x * 3.0));
+        gl_PointSize = 1.6 * (280.0 / max(-mv.z, 0.001));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform vec3 cRim; varying float vF;
+      void main(){
+        float d = length(gl_PointCoord - 0.5);
+        if (d > 0.5) discard;
+        float a = (1.0 - d * 2.0) * 0.16 * vF;
+        gl_FragColor = vec4(cRim * a, a);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+  const pts = new THREE.Points(g, m); pts.name = 'poeira';
+  cena.add(pts);
+})();
+
+/* ============================================================
+   5. POS-PROCESSAMENTO — bloom leve (o brilho vem do shader)
+   ============================================================ */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(cena, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.30, 0.55, 0.80);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+composer.setSize(innerWidth, innerHeight);
+
+/* ============================================================
+   6. CONTROLES + INTERACAO (rotacao com inercia)
+   ============================================================ */
+let girY = -0.35, velY = 0, girX = 0.0, velX = 0;
+let expSuave = 0;
+
+const el = id => document.getElementById(id);
+const ctr = { exp: 0, glow: 1, spd: 0.22, cap: true, fim: true };
+
+el('cCap').onchange = e => { ctr.cap = e.target.checked; };
+el('cFim').onchange = e => { ctr.fim = e.target.checked; };
+el('rExp').oninput  = e => { ctr.exp  = +e.target.value; el('vExp').textContent  = ctr.exp.toFixed(2); };
+el('rGlow').oninput = e => { ctr.glow = +e.target.value; el('vGlow').textContent = ctr.glow.toFixed(2); };
+el('rSpd').oninput  = e => { ctr.spd  = +e.target.value; el('vSpd').textContent  = ctr.spd.toFixed(2); };
+
+// estado inicial por URL (?exp=1&glow=1.3&spd=0&cap=0&fim=0&hud=0&ang=0.8)
+// util para linkar um estado pronto dentro da apresentacao
+(function viaURL(){
+  const q = new URLSearchParams(location.search);
+  const num = (k, v) => q.has(k) ? +q.get(k) : v;
+  const bol = (k, v) => q.has(k) ? !(q.get(k) === '0' || q.get(k) === 'false') : v;
+  ctr.exp  = Math.max(0, Math.min(1, num('exp',  ctr.exp)));
+  ctr.glow = Math.max(0, Math.min(2, num('glow', ctr.glow)));
+  ctr.spd  = Math.max(0, Math.min(1, num('spd',  ctr.spd)));
+  ctr.cap  = bol('cap', ctr.cap);
+  ctr.fim  = bol('fim', ctr.fim);
+  el('rExp').value = ctr.exp;   el('vExp').textContent  = ctr.exp.toFixed(2);
+  el('rGlow').value = ctr.glow; el('vGlow').textContent = ctr.glow.toFixed(2);
+  el('rSpd').value = ctr.spd;   el('vSpd').textContent  = ctr.spd.toFixed(2);
+  el('cCap').checked = ctr.cap; el('cFim').checked = ctr.fim;
+  if (!bol('hud', true)) document.getElementById('hud').style.display = 'none';
+  if (q.has('ang')) girY = +q.get('ang');
+  if (q.has('exp')) expSuave = ctr.exp;      // sem animacao de entrada
+})();
+
+let arrastando = false, lastX = 0, lastY = 0;
+const cv = renderer.domElement;
+cv.style.cursor = 'grab';
+cv.addEventListener('pointerdown', e => { arrastando = true; lastX = e.clientX; lastY = e.clientY; cv.style.cursor = 'grabbing'; });
+addEventListener('pointerup',   () => { arrastando = false; cv.style.cursor = 'grab'; });
+addEventListener('pointermove', e => {
+  if (!arrastando) return;
+  velY += (e.clientX - lastX) * 0.00045;      // inercia: acumula velocidade
+  velX += (e.clientY - lastY) * 0.00030;
+  lastX = e.clientX; lastY = e.clientY;
+});
+
+/* ============================================================
+   7. LOOP
+   ============================================================ */
+let tPrev = performance.now() * 0.001, tAcum = 0;  // relogio proprio (THREE.Clock deprecado)
+
+function anima(){
+  const tNow = performance.now() * 0.001;
+  const dt = Math.min(tNow - tPrev, 0.05); tPrev = tNow; tAcum += dt;
+  const t = tAcum;
+
+  // rotacao lenta no eixo Y + inercia suave
+  velY *= 0.94; velX *= 0.90;
+  girY += velY + ctr.spd * 0.6 * dt;
+  girX  = THREE.MathUtils.clamp(girX + velX, -0.55, 0.55);
+  girX *= 0.995;
+  pivo.rotation.y = girY;
+  halter.rotation.y += dt * 0.05;          // a celula em divisao gira sozinha, ao fundo
+  pivo.rotation.x = girX + Math.sin(t * 0.18) * 0.02;   // respiro
+
+  // vista explodida: cada camada e um objeto separado
+  expSuave += (ctr.exp - expSuave) * Math.min(1, dt * 6.0);
+  const E = expSuave;
+  citoplasma.position.y = 0;
+  membrana.position.y   = 0.78 * E;
+  capsula.position.y    = 1.62 * E;
+  fimbrias.position.y   = 2.34 * E;
+  celula.position.y     = -1.18 * E;
+  reflexo.material.uniforms.uGlow.value = uComuns.uGlow.value * (1 - E * 0.85);
+
+  // enquadramento: distancia calculada para caber na tela (e afasta ao explodir)
+  const tg = Math.tan(THREE.MathUtils.degToRad(camera.fov) * 0.5);
+  const dH = 1.52 / (tg * camera.aspect) * 1.42;   // cabe no eixo horizontal
+  const dV = (0.74 + 1.46 * E) / tg;               // cabe na pilha explodida
+  camera.position.z = Math.max(dH, dV);
+  camera.position.y = 0.32 + 0.10 * E;
+  camera.lookAt(0, 0, 0);
+
+  // isoladas na vista explodida, as cascas precisam de mais corpo para serem lidas
+  matMembrana.uniforms.uOpac.value = 1.0 + 1.10 * E;
+  matCapsula.uniforms.uOpac.value  = 1.0 + 1.45 * E;
+  matFimbria.uniforms.uOpac.value  = 1.0 + 0.60 * E;
+
+  // visibilidade
+  capsula.visible  = ctr.cap;
+  fimbrias.visible = ctr.fim;
+
+  // uniforms
+  uComuns.uTime.value = t;
+  uComuns.uGlow.value = ctr.glow;
+  uComuns.uCamPos.value.copy(camera.position);
+  bloom.strength = 0.10 + 0.26 * ctr.glow;
+
+  composer.render();
+  requestAnimationFrame(anima);
+}
+anima();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+});
+
+// API exposta para a apresentacao animar cada camada isoladamente
+window.BACILO = { cena, camera, renderer, celula, citoplasma, membrana, capsula, fimbrias, halter, ctr, uComuns, bloom };
+
+// sinal para a verificacao automatica
+console.log('PROTOTIPO_OK cocobacilo pronto — camadas:',
+  celula.children.map(o => o.name).join(', '));
+</script>
+</body>
+</html>

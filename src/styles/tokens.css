@@ -1,0 +1,39 @@
+/* Sistema visual v2. Referencia: oryzo.ai (Lusion) — preto QUENTE, creme, tipografia pesada e
+   pouca coisa na tela. A cor vem das ESTRUTURAS da bacteria: cada uma tem a sua. */
+:root {
+  --bg: #12100e;
+  --bg-2: #1a1714;
+  --bg-3: #24201c;
+  --fg: #f3e9d9;          /* creme */
+  --fg-dim: #a89e90;
+  --fg-mute: #6b6358;
+  --linha: rgba(243, 233, 217, 0.14);
+
+  /* cores das estruturas (as mesmas do modelo 3D) */
+  --c-capsula: #eadfc8;
+  --c-membrana-externa: #1fb8a6;
+  --c-los: #ff7a45;
+  --c-porinas: #4c8dff;
+  --c-adesinas: #d4e157;
+  --c-pili: #f5e6a3;
+  --c-peptidoglicano: #58c17a;
+  --c-beta-lactamase: #ff5a3c;
+  --c-membrana-interna: #f2b441;
+  --c-pbp3: #e0247b;
+  --c-ribossomos: #9a8cff;
+  --c-nucleoide: #c86bfa;
+  --c-plasmideo: #22e8e0;
+  --c-secrecao: #ff4d5a;
+
+  --acento: var(--c-los);  /* cada capitulo troca o acento */
+  --sangue: #b3202c;
+
+  --font-display: 'Inter Variable', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
+  --font-text: 'Inter Variable', 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'Cascadia Code', Consolas, monospace;
+
+  /* grade: margem, coluna de texto, coluna de midia */
+  --m: clamp(24px, 4.2vw, 84px);
+  --col-texto: clamp(320px, 29vw, 560px);
+  --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
+}

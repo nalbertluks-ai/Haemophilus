@@ -1,0 +1,24 @@
+{
+ "imagens": [
+  {
+   "arquivo": "C:\\Users\\nalbe\\Downloads\\slide tal\\hamelofilos\\1.png",
+   "organismo_confirmado": "Haemophilus influenzae não tipável (NTHi) — confirmado. NÃO é E. coli, Klebsiella, Bordetella, Legionella nem Salmonella.",
+   "confianca": "alta",
+   "veredito": "usar com legenda ressalvada",
+   "fonte_url": "https://www.eurekalert.org/news-releases/735525",
+   "legenda_oficial": "The bacteria called non-typeable Haemophilus influenzae are a common cause of infection in the upper respiratory tract. By attaching to surfaces in the body the bacteria form a biofilm. Wu et al. have reported that when the bacteria encounter non-lethal amounts of specific antibiotics they are stimulated to form a biofilm, a structure that causes chronic infection and which can be highly resistant to antibiotics. (Tradução sugerida: Haemophilus influenzae não tipável, causa comum de infecção do trato respiratório superior; ao se aderir a superfícies no organismo, a bactéria forma biofilme.)",
+   "credito": "Micrografia eletrônica de varredura colorizada de Haemophilus influenzae não tipável (NTHi) aderida a uma superfície. Crédito: Paul Webster, Ph.D. — USC / Oak Crest Institute of Science. Imagem de divulgação do estudo Wu et al., PLOS ONE, 2014 (doi:10.1371/journal.pone.0099204).",
+   "licenca": "Indefinida. A imagem circulou como foto de press release (EurekAlert / phys.org / Medical News Today, jul/2014) SEM declaração de licença; apenas a linha de crédito 'Credit: Paul Webster, Ph.D.'. O artigo do PLOS ONE é CC BY 4.0, mas as MEVs publicadas no artigo (Figura 6) são em TONS DE CINZA — esta versão colorizada não é figura do artigo, então a CC BY do paper NÃO cobre ela automaticamente. Uso didático em sala com crédito visível é o cenário de menor risco; não usar em material publicado/comercial sem pedir autorização ao autor."
+  },
+  {
+   "arquivo": "C:\\Users\\nalbe\\Downloads\\slide tal\\hamelofilos\\1947_lores.jpg",
+   "organismo_confirmado": "Haemophilus influenzae — confirmado (coloração de Gram, bacilos Gram-negativos)",
+   "confianca": "alta",
+   "veredito": "usar",
+   "fonte_url": "https://phil.cdc.gov/Details.aspx?pid=1947",
+   "legenda_oficial": "This illustration depicts a photomicrograph of a Gram stained specimen, which revealed the presence of numerous, Gram negative, Haemophilus influenzae bacteria. (Tradução sugerida: Fotomicrografia de espécime corado pelo método de Gram, revelando numerosas bactérias Gram-negativas Haemophilus influenzae.)",
+   "credito": "CDC/Public Health Image Library (PHIL), imagem ID #1947, 1979.",
+   "licenca": "Domínio público — o CDC declara explicitamente: 'None - This image is in the public domain and thus free of any copyright restrictions.' Crédito ao CDC é boa prática, mas não é exigência legal."
+  }
+ ]
+}

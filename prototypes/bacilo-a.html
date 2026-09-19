@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haemophilus influenzae — cocobacilo</title>
+<style>
+  :root{
+    --bg:#07090C;
+    --ciano:#22E8E0;
+    --ciano-fraco:rgba(34,232,224,.55);
+    --linha:rgba(34,232,224,.18);
+    --texto:rgba(226,246,245,.92);
+    --texto-fraco:rgba(180,208,207,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+  body{
+    font-family:"Inter","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color:var(--texto);
+    -webkit-font-smoothing:antialiased;
+  }
+  #cena{position:fixed;inset:0;display:block}
+
+  /* ---------- tipografia de apresentacao ---------- */
+  #titulo{
+    position:fixed;top:34px;left:38px;z-index:5;pointer-events:none;
+    max-width:min(46vw,520px);
+  }
+  #titulo .kicker{
+    font-size:10px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--ciano-fraco);margin-bottom:14px;
+  }
+  #titulo h1{
+    margin:0;font-size:clamp(22px,2.5vw,40px);font-weight:300;
+    letter-spacing:.005em;line-height:1.08;font-style:italic;
+  }
+  #titulo h1 b{font-weight:600;font-style:italic}
+  #titulo .sub{
+    margin-top:14px;font-size:12px;line-height:1.75;color:var(--texto-fraco);
+    letter-spacing:.02em;
+  }
+  #titulo .sub span{color:var(--ciano);font-variant-numeric:tabular-nums}
+
+  /* ---------- escala ---------- */
+  #escala{
+    position:fixed;bottom:34px;right:38px;z-index:5;pointer-events:none;text-align:right;
+  }
+  #escala .barra{
+    height:1px;width:120px;margin-left:auto;
+    background:linear-gradient(90deg,transparent,var(--ciano));
+    box-shadow:0 0 12px rgba(34,232,224,.7);
+  }
+  #escala .txt{
+    margin-top:9px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--texto-fraco);
+  }
+
+  /* ---------- painel de controles ---------- */
+  #painel{
+    position:fixed;bottom:30px;left:38px;z-index:6;width:268px;
+    padding:20px 20px 18px;border-radius:14px;
+    background:linear-gradient(180deg,rgba(11,18,22,.82),rgba(7,9,12,.9));
+    border:1px solid var(--linha);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 24px 60px -24px rgba(0,0,0,.9), inset 0 1px 0 rgba(34,232,224,.08);
+  }
+  #painel h2{
+    margin:0 0 16px;font-size:9px;font-weight:600;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--ciano-fraco);
+  }
+  .linha{display:flex;align-items:center;gap:10px;margin:0 0 11px;cursor:pointer;user-select:none}
+  .linha:last-of-type{margin-bottom:0}
+  .linha .nome{font-size:11.5px;letter-spacing:.03em;flex:1;color:var(--texto)}
+  .linha .nome em{font-style:normal;color:var(--texto-fraco);font-size:10px}
+  input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;margin:0;
+    width:30px;height:16px;border-radius:9px;flex:0 0 auto;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+    position:relative;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s;
+  }
+  input[type=checkbox]::after{
+    content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;
+    background:rgba(226,246,245,.55);transition:transform .2s,background .2s;
+  }
+  input[type=checkbox]:checked{
+    background:rgba(34,232,224,.22);border-color:rgba(34,232,224,.6);
+    box-shadow:0 0 14px rgba(34,232,224,.32);
+  }
+  input[type=checkbox]:checked::after{transform:translateX(14px);background:var(--ciano)}
+
+  .grupo{margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.07)}
+  .slider{margin:0 0 14px}
+  .slider:last-child{margin-bottom:0}
+  .slider .top{
+    display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;
+    font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--texto-fraco);
+  }
+  .slider .top b{
+    font-weight:500;letter-spacing:.06em;color:var(--ciano);
+    font-variant-numeric:tabular-nums;text-transform:none;font-size:10px;
+  }
+  input[type=range]{
+    appearance:none;-webkit-appearance:none;width:100%;height:3px;margin:0;border-radius:2px;
+    background:rgba(255,255,255,.1);cursor:pointer;outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    appearance:none;-webkit-appearance:none;width:12px;height:12px;border-radius:50%;
+    background:var(--ciano);border:none;box-shadow:0 0 12px rgba(34,232,224,.75);cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:12px;height:12px;border:none;border-radius:50%;
+    background:var(--ciano);box-shadow:0 0 12px rgba(34,232,224,.75);cursor:pointer;
+  }
+
+  /* ---------- rotulos da vista explodida ---------- */
+  .rotulo{
+    position:fixed;z-index:4;pointer-events:none;opacity:0;
+    transform:translate(-50%,0);white-space:nowrap;text-align:center;
+  }
+  .rotulo .tr{
+    width:1px;height:26px;margin:0 auto 8px;
+    background:linear-gradient(180deg,transparent,var(--ciano));
+  }
+  .rotulo .tx{
+    font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--texto);
+    text-shadow:0 0 18px rgba(0,0,0,.9);
+  }
+  .rotulo .tx i{display:block;font-style:normal;margin-top:5px;font-size:8.5px;
+    letter-spacing:.14em;color:var(--texto-fraco)}
+
+  #aviso{
+    position:fixed;inset:0;display:none;place-items:center;z-index:20;
+    font-size:13px;color:var(--texto);padding:40px;text-align:center;line-height:1.7;
+  }
+  @media (max-width:980px){
+    #painel{width:calc(100vw - 32px);left:16px;bottom:16px}
+    #titulo{left:16px;top:20px;max-width:calc(100vw - 32px)}
+    #escala{right:16px;bottom:auto;top:20px}
+    #escala .barra{width:70px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="cena"></canvas>
+
+<header id="titulo">
+  <div class="kicker">Micrografia eletrônica colorizada · reconstrução 3D</div>
+  <h1><b>Haemophilus</b> influenzae</h1>
+  <div class="sub">
+    Cocobacilo Gram-negativo · imóvel, <span>sem flagelo</span> · não formador de esporo<br>
+    <span>≈ 1,00 µm</span> × <span>0,45 µm</span> · razão de eixos <span>2,2 : 1</span>
+  </div>
+</header>
+
+<div id="escala">
+  <div class="barra"></div>
+  <div class="txt">0,5 µm</div>
+</div>
+
+<section id="painel">
+  <h2>Camadas &amp; render</h2>
+
+  <label class="linha"><input type="checkbox" id="cbCapsula" checked>
+    <span class="nome">Cápsula polissacarídica <em>(tipo b)</em></span></label>
+  <label class="linha"><input type="checkbox" id="cbFimbrias" checked>
+    <span class="nome">Fímbrias / pili <em>(Hib)</em></span></label>
+  <label class="linha"><input type="checkbox" id="cbHalter" checked>
+    <span class="nome">Célula em divisão binária</span></label>
+
+  <div class="grupo">
+    <div class="slider">
+      <div class="top"><span>Vista explodida</span><b id="vExp">0,00</b></div>
+      <input type="range" id="slExp" min="0" max="1" step="0.01" value="0">
+    </div>
+    <div class="slider">
+      <div class="top"><span>Intensidade do brilho</span><b id="vGlow">1,00</b></div>
+      <input type="range" id="slGlow" min="0" max="2" step="0.01" value="1">
+    </div>
+    <div class="slider">
+      <div class="top"><span>Velocidade de rotação</span><b id="vRot">1,00</b></div>
+      <input type="range" id="slRot" min="0" max="3" step="0.01" value="1">
+    </div>
+  </div>
+</section>
+
+<div class="rotulo" id="rot0"><div class="tr"></div><div class="tx">Citoplasma<i>nucleoide + ribossomos</i></div></div>
+<div class="rotulo" id="rot1"><div class="tr"></div><div class="tx">Membrana externa<i>LOS · Gram-negativa</i></div></div>
+<div class="rotulo" id="rot2"><div class="tr"></div><div class="tx">Cápsula<i>polirribosil-ribitol-fosfato</i></div></div>
+<div class="rotulo" id="rot3"><div class="tr"></div><div class="tx">Fímbrias<i>adesão à mucosa</i></div></div>
+
+<div id="aviso"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.webgpu.js",
+    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.tsl.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
+    "postprocessing": "https://cdn.jsdelivr.net/npm/postprocessing@6.39.5/build/index.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import {
+  EffectComposer, RenderPass, EffectPass,
+  BloomEffect, VignetteEffect, NoiseEffect, ChromaticAberrationEffect,
+  BlendFunction
+} from 'postprocessing';
+
+/* =======================================================================
+   PROTÓTIPO A — materiais físicos + pós-processamento
+   Morfologia: cocobacilo (bastonete curto), razão de eixos 2,2:1,
+   imóvel (SEM flagelo), sem esporo, superfície lisa com leve
+   irregularidade orgânica. Camadas separadas e nomeadas.
+   ======================================================================= */
+
+const CIANO      = 0x22E8E0;
+const CIANO_PALE = 0x9df7f2;
+// extremos do mosqueado da superficie
+const C_ESCURO = new THREE.Color(0x0a333f);
+const C_CLARO  = new THREE.Color(0x24989e);
+
+/* ---------------------- ruído de valor 3D (JS) ---------------------- */
+function frac(n){ return n - Math.floor(n); }
+function hash3(x, y, z){
+  return frac(Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453);
+}
+function ruido(x, y, z){
+  const ix = Math.floor(x), iy = Math.floor(y), iz = Math.floor(z);
+  const fx = x - ix, fy = y - iy, fz = z - iz;
+  // suavização hermite
+  const ux = fx*fx*(3-2*fx), uy = fy*fy*(3-2*fy), uz = fz*fz*(3-2*fz);
+  const c000 = hash3(ix,   iy,   iz  ), c100 = hash3(ix+1, iy,   iz  );
+  const c010 = hash3(ix,   iy+1, iz  ), c110 = hash3(ix+1, iy+1, iz  );
+  const c001 = hash3(ix,   iy,   iz+1), c101 = hash3(ix+1, iy,   iz+1);
+  const c011 = hash3(ix,   iy+1, iz+1), c111 = hash3(ix+1, iy+1, iz+1);
+  const x00 = c000 + (c100 - c000) * ux, x10 = c010 + (c110 - c010) * ux;
+  const x01 = c001 + (c101 - c001) * ux, x11 = c011 + (c111 - c011) * ux;
+  const y0 = x00 + (x10 - x00) * uy,     y1 = x01 + (x11 - x01) * uy;
+  return y0 + (y1 - y0) * uz;
+}
+// fbm de 3 oitavas
+function fbm(x, y, z){
+  return ruido(x, y, z) * 0.60
+       + ruido(x*2.1 + 5.2, y*2.1 + 1.3, z*2.1 + 9.1) * 0.28
+       + ruido(x*4.3 + 11.7, y*4.3 + 3.9, z*4.3 + 2.2) * 0.12;
+}
+
+/* ---------------- geometria procedural do corpo ---------------- */
+// Cápsula (capsule) subdividida, vértices deslocados por ruído.
+// cintura > 0 => estrangulamento central (halter da divisão binária).
+function geoCorpo(raio, altura, opt = {}){
+  const { amp = 0.05, freq = 2.6, semente = 0, cintura = 0,
+          capSeg = 34, radSeg = 72, altSeg = 20 } = opt;
+
+  let g = new THREE.CapsuleGeometry(raio, altura, capSeg, radSeg, altSeg);
+  // remove uv/normal e solda a costura: evita emenda visível no especular
+  g.deleteAttribute('uv');
+  g.deleteAttribute('normal');
+  g = mergeVertices(g, 1e-4);
+  g.computeVertexNormals();
+
+  const pos = g.attributes.position, nor = g.attributes.normal;
+  const p = new THREE.Vector3(), n = new THREE.Vector3();
+  const cor = new Float32Array(pos.count * 3);
+  const cTmp = new THREE.Color();
+  const sigma = altura * 0.24;
+
+  for (let i = 0; i < pos.count; i++){
+    p.fromBufferAttribute(pos, i);
+    n.fromBufferAttribute(nor, i);
+
+    if (cintura > 0){
+      const k = 1 - cintura * Math.exp(-(p.y / sigma) * (p.y / sigma));
+      p.x *= k; p.z *= k;
+    }
+    // pleomorfismo: leve assimetria ao longo do eixo longo
+    const ka = 1 + 0.055 * Math.sin(p.y * 1.05 + 0.6 + semente) - 0.028 * (p.y / altura);
+    p.x *= ka; p.z *= ka;
+
+    // ruído fino (irregularidade orgânica) + lobo largo (pleomorfismo)
+    const nA = fbm(p.x*0.55 + semente*3.1, p.y*0.55 + 2.7,         p.z*0.55 + semente)     - 0.5;
+    const nB = fbm(p.x*freq + semente,     p.y*freq + semente*1.7, p.z*freq + semente*0.3) - 0.5;
+    const nC = fbm(p.x*7.4 + 3.3,          p.y*7.4 + semente*0.9,  p.z*7.4 + 1.1)          - 0.5;
+    const d = nA * amp * 2.2 + nB * amp + nC * amp * 0.34;
+
+    pos.setXYZ(i, p.x + n.x*d, p.y + n.y*d, p.z + n.z*d);
+
+    // mosqueado de micrografia colorizada, gravado em cor de vertice
+    let m = THREE.MathUtils.clamp(0.5 + (nA*0.45 + nB*0.85 + nC*1.7) * 0.85, 0, 1);
+    m = m*m*(3 - 2*m);
+    cTmp.lerpColors(C_ESCURO, C_CLARO, m);
+    cor[i*3] = cTmp.r; cor[i*3+1] = cTmp.g; cor[i*3+2] = cTmp.b;
+  }
+
+  g.setAttribute('color', new THREE.BufferAttribute(cor, 3));
+  g.computeVertexNormals();
+  g.computeBoundingSphere();
+  return g;
+}
+
+// casca concêntrica: desloca ao longo da normal (camadas sempre alinhadas)
+function geoOffset(base, dist){
+  const g = base.clone();
+  const pos = g.attributes.position, nor = g.attributes.normal;
+  for (let i = 0; i < pos.count; i++){
+    pos.setXYZ(i,
+      pos.getX(i) + nor.getX(i) * dist,
+      pos.getY(i) + nor.getY(i) * dist,
+      pos.getZ(i) + nor.getZ(i) * dist);
+  }
+  g.computeVertexNormals();
+  g.computeBoundingSphere();
+  return g;
+}
+
+/* ---------------- material de fresnel (rim light neon) ---------------- */
+function matFresnel(cor, potencia, forca){
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uCor:   { value: new THREE.Color(cor) },
+      uPot:   { value: potencia },
+      uForca: { value: forca }
+    },
+    vertexShader: /* glsl */`
+      varying vec3 vN;
+      varying vec3 vV;
+      void main(){
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vN = normalize(mat3(modelMatrix) * normal);
+        vV = normalize(cameraPosition - wp.xyz);
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3  uCor;
+      uniform float uPot;
+      uniform float uForca;
+      varying vec3 vN;
+      varying vec3 vV;
+      void main(){
+        float f = 1.0 - clamp(abs(dot(normalize(vN), normalize(vV))), 0.0, 1.0);
+        f = pow(f, uPot);
+        gl_FragColor = vec4(uCor * f * uForca, f);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    toneMapped: false
+  });
+}
+
+/* =========================== CENA =========================== */
+const canvas = document.getElementById('cena');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+} catch (e) {
+  const a = document.getElementById('aviso');
+  a.style.display = 'grid';
+  a.textContent = 'WebGL não disponível neste navegador.';
+  throw e;
+}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // trava DPR em 2
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.04;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const cena = new THREE.Scene();
+cena.background = new THREE.Color(0x07090C);
+
+const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.5, 200);
+
+// enquadramento: distancia minima para a esfera de raio RAIO_QUADRO caber
+const RAIO_QUADRO = 3.5;
+function distEnquadra(){
+  const fovV = THREE.MathUtils.degToRad(camera.fov);
+  const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
+  return Math.max(RAIO_QUADRO / Math.tan(fovV / 2), RAIO_QUADRO / Math.tan(fovH / 2));
+}
+let distBase = distEnquadra();
+camera.position.set(0.12, 0.15, 1).normalize().multiplyScalar(distBase);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;      // inércia no arraste
+controls.dampingFactor = 0.055;
+controls.enablePan = false;
+controls.minDistance = 4.5;
+controls.maxDistance = 34;
+controls.rotateSpeed = 0.55;
+controls.zoomSpeed = 0.6;
+controls.target.set(0, 0, 0);
+
+/* ------------------- ambiente procedural (reflexos) ------------------- */
+// PMREM a partir de painéis emissivos: dá reflexo de estúdio sem arquivo externo.
+function criaAmbiente(){
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  const c = new THREE.Scene();
+  c.background = new THREE.Color(0x020406);
+  const quad = new THREE.PlaneGeometry(1, 1);
+  const painel = (cor, esc, pos) => {
+    const m = new THREE.Mesh(quad, new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide }));
+    m.scale.set(esc[0], esc[1], 1);
+    m.position.set(pos[0], pos[1], pos[2]);
+    m.lookAt(0, 0, 0);
+    c.add(m);
+  };
+  painel(0x37e2da, [8, 5],  [-5,  3.2,  4.6]);   // key ciano
+  painel(0xbfe9ff, [7, 2.0],[ 0,  6.2, -0.6]);   // softbox superior
+  painel(0x123f7d, [7, 6],  [ 5, -1.2, -4.0]);   // fill azul
+  painel(0x0a1418, [16,16], [ 0, -8.0,  0.0]);   // chão escuro
+  const tex = pmrem.fromScene(c, 0.20).texture;  // sigma alto = reflexo macio
+  pmrem.dispose();
+  quad.dispose();
+  return tex;
+}
+const envMap = criaAmbiente();
+cena.environment = envMap;
+cena.environmentIntensity = 0.75;
+
+/* --------------------------- iluminação --------------------------- */
+RectAreaLightUniformsLib.init();
+
+// key: strip light longa => reflexo em risco, nao em quadrado
+const luzPrincipal = new THREE.RectAreaLight(0xe6ffff, 30, 13.0, 1.15);
+luzPrincipal.position.set(-4.2, 4.2, 4.2);
+luzPrincipal.lookAt(0, 0, 0);
+luzPrincipal.rotateZ(-0.55);
+cena.add(luzPrincipal);
+
+// segunda strip, mais fraca, do outro lado
+const luzFill = new THREE.RectAreaLight(0x9fe8ff, 9, 9.0, 0.9);
+luzFill.position.set(5.0, -1.2, 3.4);
+luzFill.lookAt(0, 0, 0);
+cena.add(luzFill);
+
+const luzContorno = new THREE.RectAreaLight(CIANO, 22, 8.5, 2.6);      // rim atrás
+luzContorno.position.set(1.8, 0.8, -5.6);
+luzContorno.lookAt(0, 0, 0);
+cena.add(luzContorno);
+
+// rim secundario azul: fecha a silhueta do lado escuro
+const luzContorno2 = new THREE.RectAreaLight(0x2f9dff, 11, 6.5, 2.2);
+luzContorno2.position.set(-3.4, -3.0, -4.2);
+luzContorno2.lookAt(0, 0, 0);
+cena.add(luzContorno2);
+
+const luzAcento = new THREE.PointLight(0x2a5cff, 11, 22, 2.0);         // reflexo sutil
+luzAcento.position.set(5.6, -2.6, 2.4);
+cena.add(luzAcento);
+
+cena.add(new THREE.AmbientLight(0x0a1a1e, 0.55));
+
+/* ======================= MODELO DA BACTÉRIA ======================= */
+// razão de eixos: (2*raio + altura) / (2*raio) = 4.44 / 2.00 = 2,22 : 1
+const RAIO = 1.00;
+const ALTURA = 2.44;
+
+const raiz = new THREE.Group();
+raiz.name = 'raiz';
+cena.add(raiz);
+
+// cada camada = grupo próprio (deslocado na vista explodida) + giro interno
+const camadas = [];
+const POSE = new THREE.Euler(0.12, 0, -0.42);   // pose de estudio (eixo longo inclinado)
+function novaCamada(nome){
+  const grupo = new THREE.Group(); grupo.name = 'camada_' + nome;  // deslocamento (eixo da tela)
+  const pose  = new THREE.Group(); pose.name  = 'pose_' + nome;    // inclinacao
+  const giro  = new THREE.Group(); giro.name  = 'giro_' + nome;    // rotacao no eixo longo
+  pose.rotation.copy(POSE);
+  pose.add(giro);
+  grupo.add(pose);
+  raiz.add(grupo);
+  const c = { nome, grupo, pose, giro };
+  camadas.push(c);
+  return c;
+}
+
+const cCitoplasma = novaCamada('citoplasma');
+const cMembrana   = novaCamada('membrana_externa');
+const cCapsula    = novaCamada('capsula_polissacaridica');
+const cFimbrias   = novaCamada('fimbrias');
+
+/* --- 1. corpo / citoplasma --- */
+const geoBase = geoCorpo(RAIO, ALTURA, { amp: 0.062, freq: 2.6, semente: 1.7 });
+
+const matCitoplasma = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,            // tom vem da cor de vertice (mosqueado)
+  vertexColors: true,
+  roughness: 0.52,
+  metalness: 0.0,
+  clearcoat: 0.85,
+  clearcoatRoughness: 0.46,
+  transmission: 0.0,
+  ior: 1.38,
+  sheen: 0.9,
+  sheenRoughness: 0.6,
+  sheenColor: new THREE.Color(CIANO),
+  iridescence: 0.34,
+  iridescenceIOR: 1.32,
+  iridescenceThicknessRange: [140, 520],
+  emissive: new THREE.Color(CIANO),
+  emissiveIntensity: 0.11,
+  envMapIntensity: 1.15
+});
+const meshCitoplasma = new THREE.Mesh(geoBase, matCitoplasma);
+meshCitoplasma.name = 'citoplasma';
+cCitoplasma.giro.add(meshCitoplasma);
+
+/* --- 2. membrana externa (casca fina + rim light) --- */
+const geoMembrana = geoOffset(geoBase, 0.055);
+const matMembrana = new THREE.MeshPhysicalMaterial({
+  color: 0x1d6f77,
+  roughness: 0.30,
+  metalness: 0.0,
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.26,
+  transmission: 0.0,
+  ior: 1.42,
+  transparent: true,
+  opacity: 0.22,
+  depthWrite: false,
+  emissive: new THREE.Color(CIANO),
+  emissiveIntensity: 0.04,
+  envMapIntensity: 2.2
+});
+const meshMembrana = new THREE.Mesh(geoMembrana, matMembrana);
+meshMembrana.name = 'membrana_externa';
+cMembrana.giro.add(meshMembrana);
+
+const rimMembrana = new THREE.Mesh(geoOffset(geoBase, 0.075), matFresnel(CIANO, 5.6, 0.62));
+rimMembrana.name = 'membrana_rim';
+cMembrana.giro.add(rimMembrana);
+
+/* --- 3. cápsula de polissacarídeo (translúcida, lisa) --- */
+const geoCapsula = geoOffset(geoBase, 0.205);
+const matCapsulaVidro = new THREE.MeshPhysicalMaterial({
+  color: 0x1b6470,
+  roughness: 0.08,
+  metalness: 0.0,
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.06,
+  // transmission fica em 0 de proposito: o passe de transmissao do three custa
+  // ~25 fps aqui e o resultado visual e identico. O vidro vem de clearcoat + envMap.
+  transmission: 0.0,
+  ior: 1.33,
+  transparent: true,
+  opacity: 0.26,
+  depthWrite: false,          // camada externa não escreve profundidade
+  side: THREE.DoubleSide,
+  envMapIntensity: 2.6
+});
+const meshCapsula = new THREE.Mesh(geoCapsula, matCapsulaVidro);
+meshCapsula.name = 'capsula_vidro';
+cCapsula.giro.add(meshCapsula);
+
+// halo aditivo suave da cápsula
+const haloCapsula = new THREE.Mesh(geoOffset(geoBase, 0.255), matFresnel(CIANO_PALE, 4.4, 0.46));
+haloCapsula.name = 'capsula_halo';
+cCapsula.giro.add(haloCapsula);
+
+/* --- 4. fímbrias / pili (só Hib): finas, curtas, esparsas --- */
+function criaFimbrias(qtd){
+  const g = new THREE.Group();
+  g.name = 'fimbrias';
+  let seed = 7.31;
+  const rnd = () => frac(Math.sin(seed++ * 91.3458) * 47453.1234);
+
+  const areaCil = 2 * Math.PI * RAIO * ALTURA;
+  const areaCap = 4 * Math.PI * RAIO * RAIO;
+  const pCil = areaCil / (areaCil + areaCap);
+
+  const mat = new THREE.MeshBasicMaterial({
+    color: 0x5fe0da, transparent: true, opacity: 0.85,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: true
+  });
+
+  for (let i = 0; i < qtd; i++){
+    const p = new THREE.Vector3(), n = new THREE.Vector3();
+
+    if (rnd() < pCil){                      // corpo cilíndrico
+      const th = rnd() * Math.PI * 2;
+      const y  = (rnd() - 0.5) * ALTURA;
+      n.set(Math.cos(th), 0, Math.sin(th));
+      p.set(n.x * RAIO, y, n.z * RAIO);
+    } else {                                // calotas
+      const z  = rnd() * 2 - 1;
+      const th = rnd() * Math.PI * 2;
+      const r  = Math.sqrt(Math.max(0, 1 - z*z));
+      const s  = z >= 0 ? 1 : -1;
+      n.set(r * Math.cos(th), z, r * Math.sin(th));
+      p.set(n.x * RAIO, n.y * RAIO + s * ALTURA * 0.5, n.z * RAIO);
+    }
+
+    // parte da superfície externa (acima da cápsula)
+    const d = (fbm(p.x*2.0 + 1.7, p.y*2.0 + 2.89, p.z*2.0 + 0.51) - 0.5) * 0.05;
+    const base = p.clone().add(n.clone().multiplyScalar(d + 0.20));
+
+    // tangente e binormal para a curvatura do filamento
+    const t = new THREE.Vector3(0, 1, 0).cross(n);
+    if (t.lengthSq() < 1e-4) t.set(1, 0, 0);
+    t.normalize();
+    const b = new THREE.Vector3().crossVectors(n, t).normalize();
+
+    const L  = 0.40 + rnd() * 0.36;            // curtas
+    const gt = (rnd() - 0.5) * 2.0;            // giro no plano tangente
+    const gb = (rnd() - 0.5) * 2.0;
+
+    // direcao de saida obliqua (nao perpendicular) => nao parece espinho
+    const dir = n.clone().multiplyScalar(0.62)
+      .addScaledVector(t, 0.28 * Math.sign(gt || 1))
+      .addScaledVector(b, 0.22 * Math.sign(gb || 1)).normalize();
+
+    const curva = new THREE.CatmullRomCurve3([
+      base.clone(),
+      base.clone().addScaledVector(dir, L * 0.30).addScaledVector(t, gt * L * 0.06),
+      base.clone().addScaledVector(dir, L * 0.62).addScaledVector(t, gt * L * 0.30).addScaledVector(b, gb * L * 0.18),
+      base.clone().addScaledVector(dir, L * 0.86).addScaledVector(t, gt * L * 0.74).addScaledVector(b, gb * L * 0.52)
+    ], false, 'catmullrom', 0.5);
+
+    const tubo = new THREE.Mesh(new THREE.TubeGeometry(curva, 22, 0.0075, 6, false), mat);
+    tubo.name = 'fimbria_' + i;
+    g.add(tubo);
+  }
+  return g;
+}
+const fimbrias = criaFimbrias(14);   // poucas e esparsas
+cFimbrias.giro.add(fimbrias);
+
+/* ------- detalhe de cena: célula em divisão binária (halter) ------- */
+const halter = new THREE.Group();
+halter.name = 'halter_divisao';
+const geoHalter = geoCorpo(0.60, 1.62, { amp: 0.05, freq: 3.2, semente: 4.9, cintura: 0.46,
+                                         capSeg: 22, radSeg: 48, altSeg: 14 });
+const matHalter = matCitoplasma.clone();
+matHalter.emissiveIntensity = 0.06;
+matHalter.transparent = true;
+matHalter.opacity = 0.5;
+const meshHalter = new THREE.Mesh(geoHalter, matHalter);
+meshHalter.name = 'halter_corpo';
+halter.add(meshHalter);
+
+const haloHalter = new THREE.Mesh(geoOffset(geoHalter, 0.12), matFresnel(CIANO, 4.6, 0.34));
+haloHalter.name = 'halter_halo';
+halter.add(haloHalter);
+
+halter.position.set(5.15, -2.35, -6.4);
+halter.rotation.set(0.47, 0.2, -1.14);
+halter.scale.setScalar(0.82);
+raiz.add(halter);
+
+/* ---------------------- poeira de fundo (profundidade) ---------------------- */
+const poeiraGeo = new THREE.BufferGeometry();
+const NP = 220, arr = new Float32Array(NP * 3);
+for (let i = 0; i < NP; i++){
+  const r = 7 + Math.random() * 13, a = Math.random() * Math.PI * 2, h = (Math.random() - 0.5) * 12;
+  arr[i*3] = Math.cos(a) * r; arr[i*3+1] = h; arr[i*3+2] = Math.sin(a) * r;
+}
+poeiraGeo.setAttribute('position', new THREE.BufferAttribute(arr, 3));
+const poeira = new THREE.Points(poeiraGeo, new THREE.PointsMaterial({
+  color: 0x4fd6d0, size: 0.035, sizeAttenuation: true, transparent: true,
+  opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
+}));
+poeira.name = 'poeira';
+cena.add(poeira);
+
+/* ======================= PÓS-PROCESSAMENTO ======================= */
+const composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType });
+composer.addPass(new RenderPass(cena, camera));
+
+const bloom = new BloomEffect({
+  blendFunction: BlendFunction.ADD,
+  intensity: 1.15,
+  luminanceThreshold: 0.22,
+  luminanceSmoothing: 0.55,
+  mipmapBlur: true,
+  radius: 0.78,
+  levels: 6,
+  resolutionScale: 0.5            // bloom em meia resolução
+});
+if (bloom.resolution) bloom.resolution.scale = 0.5;
+
+const vinheta = new VignetteEffect({ offset: 0.30, darkness: 0.78 });
+
+const granulado = new NoiseEffect({ blendFunction: BlendFunction.OVERLAY, premultiply: true });
+granulado.blendMode.opacity.value = 0.055;   // grão leve
+
+const aberracao = new ChromaticAberrationEffect({
+  offset: new THREE.Vector2(0.00075, 0.00075),
+  radialModulation: true,
+  modulationOffset: 0.42
+});
+
+composer.addPass(new EffectPass(camera, bloom, granulado, vinheta));
+composer.addPass(new EffectPass(camera, aberracao));   // convolução em passe próprio
+
+/* ========================== CONTROLES UI ========================== */
+const ui = {
+  cbCapsula:  document.getElementById('cbCapsula'),
+  cbFimbrias: document.getElementById('cbFimbrias'),
+  cbHalter:   document.getElementById('cbHalter'),
+  slExp:  document.getElementById('slExp'),
+  slGlow: document.getElementById('slGlow'),
+  slRot:  document.getElementById('slRot'),
+  vExp:  document.getElementById('vExp'),
+  vGlow: document.getElementById('vGlow'),
+  vRot:  document.getElementById('vRot')
+};
+const rotulos = [0,1,2,3].map(i => document.getElementById('rot' + i));
+
+const est = { explode: 0, glow: 1, rot: 1 };   // alvos
+const suave = { explode: 0, glow: 1, rot: 1 }; // valores suavizados
+const fmt = v => v.toFixed(2).replace('.', ',');
+
+function liga(){
+  cCapsula.grupo.visible  = ui.cbCapsula.checked;
+  cFimbrias.grupo.visible = ui.cbFimbrias.checked;
+  halter.visible          = ui.cbHalter.checked;
+
+  est.explode = parseFloat(ui.slExp.value);
+  est.glow    = parseFloat(ui.slGlow.value);
+  est.rot     = parseFloat(ui.slRot.value);
+
+  ui.vExp.textContent  = fmt(est.explode);
+  ui.vGlow.textContent = fmt(est.glow);
+  ui.vRot.textContent  = fmt(est.rot);
+}
+['cbCapsula','cbFimbrias','cbHalter','slExp','slGlow','slRot']
+  .forEach(k => ui[k].addEventListener('input', liga));
+liga();
+
+// uniformes de fresnel + suas forças base
+const fresnels = [
+  [rimMembrana.material, 0.62],
+  [haloCapsula.material, 0.46],
+  [haloHalter.material,  0.34]
+];
+
+/* ======================== LOOP DE ANIMAÇÃO ======================== */
+let tAnt = performance.now();
+let ang = 0, vel = 0;
+const OFFS = [-1.5, -0.5, 0.5, 1.5];   // ordem das camadas na vista explodida
+const vtmp = new THREE.Vector3();
+
+// geometria do quadro: espacamento e deslocamento da fileira explodida,
+// deixando livre a faixa da esquerda onde fica o painel de controles
+function quadroExplode(esc){
+  const d = camera.position.distanceTo(controls.target);
+  const fovV = THREE.MathUtils.degToRad(camera.fov);
+  const larg = 2 * d * Math.tan(fovV / 2) * camera.aspect;
+  const faixa = larg * (window.innerWidth > 980 ? 0.76 : 0.92);   // largura util
+  const usavel = Math.max(faixa - 2.4 * esc, 0.6);
+  return {
+    esp: usavel / (3 * Math.max(esc, 0.2)),
+    desl: (larg - faixa) * 0.5 / Math.max(esc, 0.2)              // empurra para a direita
+  };
+}
+
+function tick(){
+  const agora = performance.now();
+  const dt = Math.min((agora - tAnt) / 1000, 0.05);
+  tAnt = agora;
+
+  // inércia: velocidade persegue o alvo
+  vel += (est.rot * 0.32 - vel) * (1 - Math.pow(0.001, dt));
+  ang += vel * dt;
+
+  // suavização dos sliders
+  const k = 1 - Math.pow(0.002, dt);
+  suave.explode += (est.explode - suave.explode) * k;
+  suave.glow    += (est.glow    - suave.glow)    * k;
+
+  const e = suave.explode;
+
+  // encolhe o conjunto e abre as camadas dentro do quadro
+  const escRaiz = 1 - 0.38 * e;
+  raiz.scale.setScalar(escRaiz);
+  const q = quadroExplode(escRaiz);
+  raiz.position.x = q.desl * e;
+
+  camadas.forEach((c, i) => {
+    c.giro.rotation.y = ang;                  // cada camada gira no proprio centro
+    c.giro.rotation.z = Math.sin(ang * 0.35) * 0.02;
+    c.grupo.position.x = OFFS[i] * q.esp * e;
+  });
+
+  // brilho global
+  fresnels.forEach(([m, base]) => { m.uniforms.uForca.value = base * suave.glow; });
+  bloom.intensity = 1.15 * suave.glow;
+  matCitoplasma.emissiveIntensity = 0.11 * suave.glow;
+  luzContorno.intensity = 22 * (0.45 + 0.55 * suave.glow);
+
+  // cena secundária desaparece na vista explodida
+  const fade = 1 - e;
+  halter.visible = ui.cbHalter.checked && fade > 0.05;
+  matHalter.opacity = 0.5 * fade;
+  haloHalter.material.uniforms.uForca.value = 0.34 * suave.glow * fade;
+  poeira.material.opacity = 0.32 * fade;
+  poeira.rotation.y += dt * 0.012;
+
+  // rótulos projetados na tela
+  for (let i = 0; i < 4; i++){
+    const c = camadas[i], el = rotulos[i];
+    if (!c.grupo.visible || e < 0.04){ el.style.opacity = 0; continue; }
+    c.grupo.getWorldPosition(vtmp);
+    vtmp.y -= 2.35 * raiz.scale.x;
+    vtmp.project(camera);
+    const margem = Math.min(96, window.innerWidth * 0.18);
+    el.style.opacity = Math.max(0, (e - 0.04) / 0.3);
+    el.style.left = THREE.MathUtils.clamp((vtmp.x * 0.5 + 0.5) * window.innerWidth,
+                                          margem, window.innerWidth - margem) + 'px';
+    el.style.top  = ((-vtmp.y * 0.5 + 0.5) * window.innerHeight) + 'px';
+  }
+
+  controls.update();
+  composer.render(dt);
+  requestAnimationFrame(tick);
+}
+
+/* --------------------------- resize --------------------------- */
+addEventListener('resize', () => {
+  const w = window.innerWidth, h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  // mantem o zoom relativo do usuario ao mudar o formato da tela
+  const nova = distEnquadra();
+  camera.position.sub(controls.target).multiplyScalar(nova / distBase).add(controls.target);
+  distBase = nova;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+});
+
+renderer.compile(cena, camera);
+tick();
+console.log('[bacilo-a] pronto — razão de eixos', ((2*RAIO + ALTURA) / (2*RAIO)).toFixed(2));
+</script>
+</body>
+</html>

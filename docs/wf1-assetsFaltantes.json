@@ -1,0 +1,205 @@
+{
+ "itens": [
+  {
+   "o_que": "ITEM 1 (PRIORITARIO) - Retrato de Richard Friedrich Johannes Pfeiffer, de frente, fundo neutro. MELHOR OPCAO em resolucao.",
+   "url_pagina": "https://commons.wikimedia.org/wiki/File:Portrait_of_Richard_Friedrich_Johannes_Pfeiffer_Wellcome_M0012821.jpg",
+   "url_arquivo": "https://upload.wikimedia.org/wikipedia/commons/6/69/Portrait_of_Richard_Friedrich_Johannes_Pfeiffer_Wellcome_M0012821.jpg",
+   "licenca": "CC-BY",
+   "resolucao": "2.633 x 4.229 px (2,97 MB, JPEG)",
+   "credito": "Wellcome Collection / Wellcome Library, London (M0012821), CC BY 4.0, via Wikimedia Commons",
+   "observacao": "CC BY 4.0 exige credito obrigatorio no rodape. Publicado em 1906. Formato retrato bem vertical (proporcao ~1:1,6) - provavelmente vai precisar de recorte para caber num slide horizontal. Pagina original da Wellcome: https://wellcomeimages.org/indexplus/image/M0012821.html"
+  },
+  {
+   "o_que": "ITEM 1 (alternativa) - Retrato de Richard Pfeiffer, c. 1928, do Festschrift dos 70 anos dele. Esta e a imagem usada na Wikipedia.",
+   "url_pagina": "https://commons.wikimedia.org/wiki/File:Richard_Pfeiffer.jpg",
+   "url_arquivo": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Richard_Pfeiffer.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "1.105 x 1.687 px (252 KB, JPEG)",
+   "credito": "Autor desconhecido, c. 1928 (Festschrift, Zentralbl Bakteriol 106, 1928) - dominio publico, via NLM / Wikimedia Commons",
+   "observacao": "Dominio publico por idade (vida + 70 anos) + marcado como CC PD Mark 1.0. Nao exige credito legalmente, mas e boa pratica citar. Fonte: Images from the History of Medicine (NLM). Se voce quer ZERO risco de licenca, use esta em vez da Wellcome."
+  },
+  {
+   "o_que": "ITEM 1 (alternativa 2) - Retrato de Pfeiffer, versao ja recortada (enquadramento mais fechado no rosto).",
+   "url_pagina": "https://commons.wikimedia.org/wiki/File:Richard_Pfeiffer_(cropped).jpg",
+   "url_arquivo": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Richard_Pfeiffer_%28cropped%29.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "773 x 1.134 px",
+   "credito": "Autor desconhecido - dominio publico, via Wikimedia Commons",
+   "observacao": "Recorte ja pronto, poupa trabalho. Resolucao menor - ok para slide, ruim para impressao grande. Existe tambem File:3731_Pfeiffer.tif (702 x 1.017 px, dominio publico) na mesma categoria."
+  },
+  {
+   "o_que": "ITEM 1 (bonus historico) - Fotografia de 1897: os professores Koch e Pfeiffer trabalhando em laboratorio, investigando a peste em Bombaim. Otima para um slide de contexto historico 'Pfeiffer, discipulo de Koch'.",
+   "url_pagina": "https://commons.wikimedia.org/wiki/File:Professors_Koch_and_Pfeiffer_working_in_a_laboratory,_invest_Wellcome_L0030175.jpg",
+   "url_arquivo": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Professors_Koch_and_Pfeiffer_working_in_a_laboratory%2C_invest_Wellcome_L0030175.jpg",
+   "licenca": "CC-BY",
+   "resolucao": "2.907 x 3.669 px",
+   "credito": "Atribuido ao Capitao C. Moss, 1897 - Wellcome Collection (L0030175), CC BY 4.0",
+   "observacao": "CC BY 4.0, credito obrigatorio. Nao foi pedido, mas serve bem ao slide historico de 1892/Pfeiffer."
+  },
+  {
+   "o_que": "ITEM 2 (PRIORITARIO - MELHOR ACHADO) - Purpura fulminans CAUSADA POR Haemophilus influenzae em lactente de 5 meses. Serie fotografica da progressao: Fig 1 (A,B) petequias discretas na face no dia 1; Fig 3 (A,B) petequias e purpura piorando em face, torax, tronco e extremidades 2h apos chegada na UTI pediatrica; Fig 4 (A) purpura fulminans no dia 5, (B) descamacao/ruptura de pele em face, ombros e tronco, (C) necrose dos dedos.",
+   "url_pagina": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12126183/",
+   "url_arquivo": "Fig 1: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f625/12126183/2033d322b939/cureus-0017-00000083313-i01.jpg | Fig 3: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f625/12126183/82565d4c259d/cureus-0017-00000083313-i03.jpg | Fig 4: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f625/12126183/e1c093734330/cureus-0017-00000083313-i04.jpg",
+   "licenca": "CC-BY",
+   "resolucao": "Painel composto multi-imagem; nao ha metadado publico de pixels. Baixar e conferir (tipicamente 1.000-2.000 px de largura no PMC).",
+   "credito": "Ko A, Mohammad S, Chandran A, Donovan SD, Balakumar N. Purpura Fulminans Secondary to Haemophilus influenzae in an Infant. Cureus. 2025;17(5):e83313. doi:10.7759/cureus.83313 - CC BY 4.0 (Figura 3)",
+   "observacao": "ATENCAO: o ROSTO DO BEBE ESTA VISIVEL nas Figs 1, 3 e 4. Os autores publicaram com consentimento sob CC BY, entao o reuso e licito, mas para uma apresentacao academica considere recortar apenas tronco/extremidades ou desfocar os olhos. Vantagem enorme: e purpura fulminans por H. influenzae de verdade - a legenda NAO precisa dizer 'ilustrativa de outra etiologia'. Fig 4 e a mais dramatica (necrose); Fig 3 e a mais didatica para 'purpura extensa'. Confirmei a licenca no proprio PMC: 'Copyright 2025, Ko et al. ... Creative Commons Attribution License CC-BY 4.0'."
+  },
+  {
+   "o_que": "ITEM 2 (alternativa - SEM ROSTO) - Purpura fulminans meningococica em crianca de 22 meses. Fig 1: lesoes purpuricas e equimoticas em membro superior. Fig 2: placas equimoticas discretas em parede toracica anterior. Fig 3: lesoes purpuricas em membro inferior, sem necrose cutanea.",
+   "url_pagina": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13356594/",
+   "url_arquivo": "Fig 1: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a95/13356594/28e5c9181702/cureus-0018-00000110715-i01.jpg | Fig 2: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a95/13356594/5026772577e3/cureus-0018-00000110715-i02.jpg | Fig 3: https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2a95/13356594/da9db0a5ccbc/cureus-0018-00000110715-i03.jpg",
+   "licenca": "CC-BY",
+   "resolucao": "Nao publicada nos metadados; baixar e conferir.",
+   "credito": "Purpura Fulminans in a 22-Month-Old Child: Early Recognition and Favorable Outcome Without Limb Loss. Cureus. 2026;18(6):e110715. doi:10.7759/cureus.110715 - CC BY 4.0 (Figura 1)",
+   "observacao": "MELHOR ESCOLHA ETICA: as tres figuras clinicas mostram SO membros e torax, sem face, sem paciente identificavel. Etiologia e Neisseria meningitidis (confirmada por hemocultura e PCR do liquor), entao a legenda deve dizer honestamente 'purpura fulminans por meningococcemia - imagem ilustrativa; o padrao cutaneo da Febre Purpurica Brasileira e semelhante'. Todo artigo Cureus e CC BY 4.0 por politica editorial."
+  },
+  {
+   "o_que": "ITEM 2 (alternativa CDC, dominio publico) - Meningococcemia em lactente de 4 meses do sexo feminino, com gangrena das extremidades por oclusoes arteriais. Serie PHIL 1334 a 1338: 1334 (gangrena das maos), 1335 (corpo inteiro, gangrena das extremidades), 1336 (pes), 1337 (mao direita), 1338 (joelho esquerdo).",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=1335",
+   "url_arquivo": "https://wwwn.cdc.gov/phil/PHIL_Images/1335/1335_lores.jpg (baixa) - alta resolucao pelo botao 'hi-resolution image' na pagina de detalhes",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 px no lado maior. Alta: TIFF de varios MB (varia por imagem; 1334 nao tem download de alta resolucao)",
+   "credito": "CDC / Public Health Image Library (PHIL ID# 1335) - dominio publico",
+   "observacao": "CUIDADO COM A LEGENDA: estas imagens mostram o ESTAGIO TARDIO (gangrena estabelecida / necrose isquemica), nao o exantema purpurico agudo. Nao servem para ilustrar 'petequias e purpura extensa' - servem para ilustrar 'sequela da purpura fulminans'. Sem restricao de copyright, mas o rosto aparece em PHIL 1335. PHIL 17602 (lactente de 20 meses apos multiplas amputacoes, hi-res 12,73 MB) e do mesmo tipo."
+  },
+  {
+   "o_que": "ITEM 2 (VAZIO HONESTO) - Nao existe nenhuma fotografia clinica de FEBRE PURPURICA BRASILEIRA disponivel com licenca segura.",
+   "url_pagina": "https://wwwnc.cdc.gov/eid/article/15/4/09-0014_article",
+   "licenca": "uso restrito",
+   "observacao": "BUSCA NEGATIVA, relato honesto: (1) o CDC PHIL tem ZERO imagens para as buscas 'Brazilian purpuric fever' e 'purpura fulminans' - so tem 'purpura' generico (Henoch-Schonlein, histoplasmose, purpura senil) e a serie de meningococcemia acima; (2) a carta do EID 2009 'Suspected Brazilian Purpuric Fever, Brazilian Amazon Region' (PMC2671440) NAO tem nenhuma figura nem fotografia clinica - so uma tabela de 7 casos; (3) os artigos historicos da FPB (Lancet 1987, Rev Saude Publica 1991, Rev Inst Med Trop SP 1987/1989/1994) sao de epoca pre-CC e nao trazem fotos reutilizaveis. Conclusao: para o slide de FPB voce PRECISA usar uma imagem de purpura fulminans de outra etiologia com legenda explicitamente ilustrativa - recomendo a opcao de 22 meses (sem rosto) ou a de H. influenzae de 5 meses. Nao encontrei nada de banco pago que valesse citar."
+  },
+  {
+   "o_que": "ITEM 3 (PRIORITARIO) - Bubao inguinal de cancro mole: visao aproximada da regiao pubiana de um paciente mostrando buboes inguinais BILATERAIS desenvolvidos a partir da disseminacao de uma lesao genital de cancro mole por Haemophilus ducreyi.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=5811",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/20040616/037ac62a65454a918c56f4b134dfa2b2/5811.tif (8,47 MB, TIFF) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/20040616/037ac62a65454a918c56f4b134dfa2b2/5811_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 461 px (36 KB). Alta: TIFF de 8,47 MB",
+   "credito": "CDC / Susan Lindsley, 1971 - Public Health Image Library (PHIL ID# 5811), dominio publico",
+   "observacao": "Exatamente o pedido: CDC PHIL, dominio publico, sem marca d'agua, sem restricao. PRECISA DE RECORTE: a genitalia masculina aparece no enquadramento - recorte para mostrar so a regiao inguinal, ou avise a turma antes. Tambem disponivel no Commons em baixa resolucao: https://commons.wikimedia.org/wiki/File:Haemophilus_ducreyi_5811_lores.jpg . Confirmei que o link direto .tif responde HTTP 200."
+  },
+  {
+   "o_que": "ITEM 3 (alternativa) - Bubao inguinal DIREITO de cancro mole que ROMPEU atraves da pele sobrejacente (linfonodo supurado e fistulizado). Mais dramatico, bom para mostrar a evolucao do bubao.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=5810",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/20040616/a65275c552d54bb397d2c4471a60286e/5810.tif (pagina anuncia 7,53 MB) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/20040616/a65275c552d54bb397d2c4471a60286e/5810_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 px no lado maior. Alta: TIFF ~6-7,5 MB",
+   "credito": "CDC / Susan Lindsley, 1971 - Public Health Image Library (PHIL ID# 5810), dominio publico",
+   "observacao": "Enquadramento mais fechado na regiao inguinal direita - menos necessidade de recorte que a 5811. Boa para o par 'bubao fechado vs bubao roto'."
+  },
+  {
+   "o_que": "ITEM 4 (PRIORITARIO - PARCIALMENTE FRUSTRADO) - Ilustracao 3D gerada por computador de um grupo de Haemophilus influenzae Gram-negativos. A legenda oficial do CDC diz explicitamente: 'A recriacao artistica foi baseada em imagens de microscopia eletronica de varredura (SEM)'.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=22878",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/22878/22878.tif (19,54 MB anunciado na pagina) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/22878/22878_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 700 px. Alta: TIFF de ~19,5 MB (aproximadamente 3.000 x 3.000 px)",
+   "credito": "CDC / Sarah Bailey Cutchin; ilustradora: Jennifer Oosthuizen, 2016 - Public Health Image Library (PHIL ID# 22878), dominio publico",
+   "observacao": "LEIA ISTO: NAO E UMA MICROGRAFIA ELETRONICA DE VERDADE. E uma renderizacao 3D colorizada feita a partir de SEM. Colorida, alta resolucao, dominio publico, sem marca d'agua - visualmente e o que voce quer - mas a legenda tem que dizer 'ilustracao 3D baseada em microscopia eletronica de varredura (CDC)' e NAO 'micrografia eletronica de varredura'. Usar como SEM seria desonesto num contexto academico."
+  },
+  {
+   "o_que": "ITEM 4 (VAZIO HONESTO) - Nao encontrei nenhuma MEV/SEM real de Haemophilus influenzae com licenca reutilizavel.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/AdvancedSearchResults.aspx?Search=Haemophilus%20influenzae&parentid=12103&catid=12108",
+   "licenca": "uso restrito",
+   "observacao": "BUSCA NEGATIVA, relato honesto: varri as 19 imagens da categoria 'Haemophilus influenzae' e as 74 da categoria 'Haemophilus' do CDC PHIL - nao ha nenhuma SEM real, apenas a renderizacao 3D (PHIL 22878) e fotomicrografias opticas. A Wellcome Collection nao tem nenhuma imagem de MEV de H. influenzae (busquei o catalogo pela API: so retorna material de vacina Hib e modelos 3D de meningite). Na NIAID/Flickr nao achei. As MEV reais que circulam sao: (a) Science Photo Library C012/1362 - PAGO, licenca restrita; (b) uma SEM de Hib atribuida a Sanofi Pasteur - CC BY-NC-ND 2.0, ou seja, proibe derivados e uso comercial (para aula fechada talvez passe, mas nao permite recorte/edicao e o credito e obrigatorio). SUGESTAO: use PHIL 22878 rotulada corretamente como ilustracao 3D, ou substitua por PHIL 23029 (fotomicrografia colorizada digitalmente, item 5 abaixo)."
+  },
+  {
+   "o_que": "ITEM 5 (melhor substituto para Gram de liquor) - Fotomicrografia colorizada digitalmente mostrando numerosos cocobacilos Gram-negativos de Haemophilus influenzae. Colorizada, e a imagem mais 'bonita' de morfologia do H. influenzae no acervo do CDC.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=23029",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/23029/23029.tif (21,29 MB anunciado) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/23029/23029_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 476 px. Alta: TIFF de ~21,3 MB",
+   "credito": "CDC / William B. Cherry, Ph.D., 1964 - Public Health Image Library (PHIL ID# 23029), dominio publico",
+   "observacao": "Tambem no Commons sob CC0: https://commons.wikimedia.org/wiki/File:23029_lores.jpg (700 x 476 px). Sem marca d'agua. A legenda oficial NAO diz que o material e liquor - diz apenas 'cocobacilos Gram-negativos de H. influenzae'. Nao invente 'liquor' na legenda."
+  },
+  {
+   "o_que": "ITEM 5 (alternativa) - Fotomicrografia de esfregaco corado pelo Gram revelando numerosos Haemophilus influenzae Gram-negativos.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=1947",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/1947/1947.tif (13,55 MB anunciado; confirmei HTTP 200, 7,7 MB transferidos) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/1947/1947_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 679 px. Alta: TIFF ~7,7-13,5 MB",
+   "credito": "CDC, 1979 - Public Health Image Library (PHIL ID# 1947), dominio publico",
+   "observacao": "Gram classico, dominio publico, sem marca d'agua. Material nao especificado na legenda oficial - de novo, nao chame de liquor."
+  },
+  {
+   "o_que": "ITEM 5 (alternativa com material identificado) - Fotomicrografia de aspirado transtraqueal corado pelo Gram, 1000X, mostrando bacilos Gram-negativos (identificados como Haemophilus influenzae) junto a cocos Gram-negativos (Neisseria sp. nao meningococica), estes ultimos intracelulares.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=15536",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/15536/15536.tif (18,34 MB anunciado) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/15536/15536_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 px no lado maior. Alta: TIFF ~18,3 MB",
+   "credito": "CDC / Dr. Mike Miller, 1982 - Public Health Image Library (PHIL ID# 15536), dominio publico",
+   "observacao": "Vantagem: a legenda oficial diz o material (aspirado transtraqueal) e a magnificacao (1000X), o que da uma legenda academica solida. Desvantagem: tem duas especies na lamina, entao pode confundir o aluno. Existe uma segunda vista do MESMO especime em PHIL 18442."
+  },
+  {
+   "o_que": "ITEM 5 (BONUS muito relevante para FPB) - Fotomicrografia de esfregaco corado pelo Gram revelando grande quantidade de Haemophilus aegyptius Gram-negativos - ou seja, o proprio agente da Febre Purpurica Brasileira (H. influenzae biogrupo aegyptius).",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=18441",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/18441/18441.tif (18,35 MB anunciado; confirmei ~12 MB) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/18441/18441_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 460 px (41 KB). Alta: TIFF ~12-18 MB",
+   "credito": "CDC / Dr. W.A. Clark, 1977 - Public Health Image Library (PHIL ID# 18441), dominio publico",
+   "observacao": "ACHADO VALIOSO que voce nao pediu: Gram do proprio H. aegyptius. Tambem no Commons sob CC0: https://commons.wikimedia.org/wiki/File:18441_lores.jpg . Complementos da mesma linhagem: PHIL 29345 (colonias de H. aegyptius em agar sangue, hi-res 18,47 MB) e PHIL 1611 (placa de agar sangue com H. aegyptius, hi-res 13,05 MB) - o CDC PHIL tem exatamente 3 imagens de H. aegyptius, essas."
+  },
+  {
+   "o_que": "ITEM 5 (VAZIO HONESTO) - Nao encontrei Gram DE LIQUOR mostrando cocobacilos Gram-negativos de H. influenzae com licenca segura.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=29200",
+   "licenca": "uso restrito",
+   "observacao": "BUSCA NEGATIVA. O CDC PHIL tem SIM duas imagens de LIQUOR com H. influenzae, mas NENHUMA delas e Gram: PHIL 29200 (liquor de paciente com meningite, 1188X, tecnica de ANTICORPO FLUORESCENTE, CDC/Dr. M.S. Mitchell, 1964, hi-res 18,46 MB - https://wwwn.cdc.gov/phil/PHIL_Images/29200/29200.tif) e PHIL 29181 (cultura de liquor apos 3 dias, tambem anticorpo fluorescente, hi-res 23,94 MB). Se voce quiser 'liquor + H. influenzae' com legenda honesta, use a 29200 dizendo 'liquor, imunofluorescencia'. Busquei tambem no Europe PMC por figuras de Gram de liquor com H. influenzae em artigos abertos - zero resultados utilizaveis. Alternativas de Commons, todas de ESCARRO e nao liquor: File:Haemophilus_influenzae_sputum_1000x_edited.jpg (1.920 x 1.200 px, CC BY-SA 4.0, Microman12345) e File:Haemophilus_influenzae_Gram.JPG (1.902 x 1.591 px, CC BY-SA 4.0, Bobjgalindo) - atencao que CC BY-SA obriga a compartilhar derivados na mesma licenca."
+  },
+  {
+   "o_que": "ITEM 6 (PRIORITARIO - MELHOR) - Morfologia colonial de Haemophilus influenzae em meio de agar chocolate, 24 h a 37 C, vista aproximada (close-up das colonias).",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=12449",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/12449/12449.tif (18,28 MB anunciado; confirmei ~16 MB) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/12449/12449_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 525 px. Alta: TIFF ~16-18,3 MB",
+   "credito": "CDC / Amanda Moore, MT; Todd Parker, PhD; Audra Marsh; foto de Pete Seidel, 2010 - Public Health Image Library (PHIL ID# 12449), dominio publico",
+   "observacao": "A MELHOR para o item 6: dominio publico, alta resolucao real, SEM marca d'agua, sem rosto, legenda oficial completa (meio, tempo, temperatura). A vista da placa inteira e PHIL 12448 (700 x 687 px baixa, hi-res 13,97 MB) - bom par 'placa inteira + close'."
+  },
+  {
+   "o_que": "ITEM 6 (as imagens '10X' que voce mencionou - CONFERIDAS, sao tres) - Crescimento colonial de Haemophilus influenzae em agar chocolate a 37 C sob magnificacao de 10X em escopo digital Keyence, em tres tempos: PHIL 17142 = 24 h, PHIL 17143 = 48 h, PHIL 17141 = 72 h.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=17142",
+   "url_arquivo": "24h: https://wwwn.cdc.gov/phil/PHIL_Images/17142/17142.tif | 48h: https://wwwn.cdc.gov/phil/PHIL_Images/17143/17143.tif | 72h: https://wwwn.cdc.gov/phil/PHIL_Images/17141/17141.tif (baixa resolucao: trocar '.tif' por '_lores.jpg')",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 525 px cada. Alta: TIFF de 5,79 MB cada (as menores 'alta resolucao' da lista)",
+   "credito": "CDC / Todd Parker, Ph.D., Assoc. Director for Laboratory Science, Div. of Preparedness and Emerging Infections - Public Health Image Library (PHIL ID# 17142), dominio publico",
+   "observacao": "CONFIRMADO: sim, o CDC PHIL tem a de 10X que voce lembrava - e na verdade uma SERIE DE TRES (24/48/72 h), o que rende um slide otimo de cinetica de crescimento. Sem marca d'agua. Ressalva: a alta resolucao delas e de apenas 5,79 MB (as menores do conjunto), entao para projetar em tela grande a PHIL 12449 e melhor."
+  },
+  {
+   "o_que": "ITEM 6 (alternativas Commons, resolucao muito alta) - Colonias de H. influenzae em agar chocolate fotografadas por colaboradores do Commons.",
+   "url_pagina": "https://commons.wikimedia.org/wiki/File:Haemophilus_influenzae_culture_sur_PVX.JPG",
+   "url_arquivo": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Haemophilus_influenzae_culture_sur_PVX.JPG",
+   "licenca": "CC-BY",
+   "resolucao": "4.288 x 3.216 px",
+   "credito": "Manurx27, CC BY-SA 4.0, via Wikimedia Commons",
+   "observacao": "E CC BY-SA 4.0 (nao CC-BY puro): credito OBRIGATORIO e, se voce editar a imagem, o derivado tambem deve ser CC BY-SA. Sem marca d'agua. Outras duas na mesma linha: File:Haemophilus_influenzae_colony_morphology_on_chocolate_agar.jpg (4.160 x 2.340 px, CC BY-SA 4.0, Ajay Kumar Chaurasiya, 24 h a 37 C com 5% CO2, colonia lisa, levemente convexa, acinzentada - sem marca d'agua) e File:Haemophilus_influenzae.jpg (1.534 x 1.534 px, CC BY-SA 4.0, Stefan Walkowski, colonias sob luz refletida). Para uma apresentacao academica eu ficaria com as do CDC (dominio publico, zero obrigacao)."
+  },
+  {
+   "o_que": "ITEM 7 (PRIORITARIO - ACHADO EXATO) - Membranas mucosas internas das palpebras superiores de uma CRIANCA PEQUENA com conjuntivite piogenica (purulenta) de etiologia nao determinada: inflamacao palpebral marcada e exsudato pustular nas palpebras inferiores externas, sobretudo a esquerda.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=15192",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/15192/15192.tif (10,52 MB anunciado; confirmei HTTP 200, ~8 MB) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/15192/15192_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 x 263 px (28 KB - ja e um recorte panoramico dos olhos). Alta: TIFF ~8-10,5 MB",
+   "credito": "CDC / J. Pledger, 1976 - Public Health Image Library (PHIL ID# 15192), dominio publico",
+   "observacao": "PERFEITO para a fase 1 da Febre Purpurica Brasileira: e crianca, e purulenta, e dominio publico, sem marca d'agua. A versao de baixa resolucao JA VEM RECORTADA na faixa dos olhos (700 x 263 px), o que resolve boa parte da questao de identificabilidade - mas confira o enquadramento do TIFF de alta resolucao, que pode mostrar mais do rosto. A etiologia e 'nao determinada', entao a legenda honesta e: 'conjuntivite purulenta em crianca (etiologia nao determinada) - imagem ilustrativa da fase conjuntival que antecede a FPB'. Esta e a UNICA imagem do PHIL para a busca 'pyogenic conjunctivitis'."
+  },
+  {
+   "o_que": "ITEM 7 (alternativa) - Olhos de lactente de 3 meses com conjuntivite bilateral e exsudato branco acumulado nas palpebras inferiores (PHIL 25342); a segunda vista (PHIL 25343) mostra tambem edema periorbitario marcado com descoloracao violacea sugerindo hemorragia subjacente.",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=25342",
+   "url_arquivo": "Alta: https://wwwn.cdc.gov/phil/PHIL_Images/25342/25342.tif (18,46 MB anunciado) | Baixa: https://wwwn.cdc.gov/phil/PHIL_Images/25342/25342_lores.jpg",
+   "licenca": "dominio publico",
+   "resolucao": "Baixa: 700 px no lado maior. Alta: TIFF ~18,5 MB",
+   "credito": "CDC / Public Health Image Library (PHIL ID# 25342) - dominio publico",
+   "observacao": "CUIDADO: a etiologia aqui e CITOMEGALOVIRUS congenito com coriorretinite - nao e conjuntivite bacteriana purulenta. O exsudato branco visualmente serve, mas a legenda teria que admitir a etiologia viral, o que enfraquece o slide de FPB. Rosto de lactente visivel. Use so se a 15192 nao servir. As outras 42 imagens de 'conjunctivitis' do PHIL sao de silifis secundaria (27388, 26251), virus da doenca de Newcastle (27179-27181) e tracoma (20873, 20874) - nenhuma e conjuntivite purulenta bacteriana em crianca."
+  },
+  {
+   "o_que": "NOTA TECNICA sobre como baixar do CDC PHIL em alta resolucao",
+   "url_pagina": "https://wwwn.cdc.gov/phil/Details.aspx?pid=12449",
+   "licenca": "dominio publico",
+   "observacao": "A pagina de detalhes do PHIL oferece a alta resolucao por um botao de postback JavaScript (sem URL visivel). Descobri e VERIFIQUEI (HTTP 200) que o arquivo direto segue o padrao https://wwwn.cdc.gov/phil/PHIL_Images/{ID}/{ID}.tif para os IDs modernos, e https://wwwn.cdc.gov/phil/PHIL_Images/{data}/{hash}/{ID}.tif para os antigos (5810, 5811) - os links diretos de cada item acima ja estao com o caminho correto. A baixa resolucao e sempre {ID}_lores.jpg. Os arquivos sao TIFF: converta para JPG/PNG antes de inserir no PowerPoint/Google Slides. Aviso: a pagina inicial e a busca por arvore do PHIL estavam com erro de sistema intermitente durante a pesquisa; as paginas Details.aspx e a QuickSearch funcionam."
+  },
+  {
+   "o_que": "NOTA DE CREDITO para o rodape dos slides",
+   "url_pagina": "https://www.cdc.gov/other/agencymaterials.html",
+   "licenca": "dominio publico",
+   "observacao": "Formatos sugeridos para o rodape. CDC PHIL: 'CDC/PHIL ID# 12449 (dominio publico)'. Wikimedia com CC BY: 'Wellcome Collection, CC BY 4.0, via Wikimedia Commons'. Wikimedia com CC BY-SA: 'Autor, CC BY-SA 4.0, via Wikimedia Commons'. Artigo Cureus/PMC: 'Ko A et al., Cureus 2025;17(5):e83313, Fig. 3, CC BY 4.0'. Regra pratica: dominio publico e CC0 nao exigem credito (mas cite por honestidade academica); CC BY e CC BY-SA EXIGEM credito visivel com o nome do autor e o nome da licenca - nao basta 'fonte: internet'."
+  }
+ ]
+}

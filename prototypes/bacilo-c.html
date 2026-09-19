@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haemophilus influenzae - reconstrucao por pontos (variante C)</title>
+<style>
+  :root{ --bg:#07090C; --ciano:#22E8E0; --magenta:#FF3FA4; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:var(--bg); overflow:hidden; }
+  body{ font-family:"Inter","Helvetica Neue",Arial,sans-serif; color:#9fb4b8; }
+  #cena{ position:fixed; inset:0; display:block; }
+
+  /* ---- HUD / controles (HTML puro) ---- */
+  #hud{
+    position:fixed; top:18px; left:18px; z-index:10; width:248px;
+    padding:16px 16px 14px; border-radius:14px;
+    background:rgba(8,14,18,.62); backdrop-filter:blur(10px);
+    border:1px solid rgba(34,232,224,.16);
+    box-shadow:0 18px 50px rgba(0,0,0,.6), inset 0 1px 0 rgba(34,232,224,.08);
+    font-size:11px; letter-spacing:.06em;
+  }
+  #hud h1{
+    margin:0 0 2px; font-size:11px; font-weight:600; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ciano);
+  }
+  #hud .sub{ margin:0 0 14px; font-size:10px; color:#5d7278; letter-spacing:.09em; font-style:italic; }
+  .linha{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin:9px 0; }
+  .linha label{ cursor:pointer; text-transform:uppercase; color:#8ea6ab; }
+  .grupo{ margin:13px 0 4px; }
+  .grupo .cab{ display:flex; justify-content:space-between; text-transform:uppercase; color:#8ea6ab; margin-bottom:5px; }
+  .grupo .val{ color:var(--ciano); font-variant-numeric:tabular-nums; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:2px; background:rgba(34,232,224,.22); border-radius:2px; outline:none; }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:11px; height:11px; border-radius:50%;
+    background:var(--ciano); box-shadow:0 0 10px rgba(34,232,224,.9); cursor:pointer;
+  }
+  input[type=checkbox]{ accent-color:var(--ciano); width:13px; height:13px; cursor:pointer; }
+  hr{ border:0; border-top:1px solid rgba(34,232,224,.12); margin:14px 0 4px; }
+
+  /* ---- legenda cientifica ---- */
+  #legenda{
+    position:fixed; right:20px; bottom:18px; z-index:10; text-align:right;
+    font-size:10px; letter-spacing:.14em; line-height:1.85; color:#4e6268; text-transform:uppercase;
+  }
+  #legenda b{ color:var(--ciano); font-weight:500; letter-spacing:.2em; }
+  #legenda i{ color:#7d9298; font-style:italic; text-transform:none; letter-spacing:.04em; }
+  #dica{ position:fixed; left:20px; bottom:18px; z-index:10; font-size:10px; letter-spacing:.12em; color:#3d4e54; text-transform:uppercase; }
+  @media (max-width:640px){ #hud{ width:204px; top:12px; left:12px; } #legenda{ font-size:9px; } }
+</style>
+</head>
+<body>
+<canvas id="cena"></canvas>
+
+<div id="hud">
+  <h1>H. influenzae</h1>
+  <p class="sub">cocobacilo &middot; nuvem de pontos</p>
+
+  <div class="linha"><label for="cCapsula">Capsula (PRP)</label><input id="cCapsula" type="checkbox" checked></div>
+  <div class="linha"><label for="cFimbrias">Fimbrias / pili</label><input id="cFimbrias" type="checkbox" checked></div>
+  <div class="linha"><label for="cDivisao">Celula em divisao</label><input id="cDivisao" type="checkbox" checked></div>
+
+  <hr>
+  <div class="grupo">
+    <div class="cab"><span>Vista explodida</span><span class="val" id="vExpl">0.00</span></div>
+    <input id="sExpl" type="range" min="0" max="1" step="0.01" value="0">
+  </div>
+  <div class="grupo">
+    <div class="cab"><span>Intensidade do brilho</span><span class="val" id="vBrilho">1.00</span></div>
+    <input id="sBrilho" type="range" min="0" max="2" step="0.01" value="1">
+  </div>
+  <div class="grupo">
+    <div class="cab"><span>Rotacao</span><span class="val" id="vRot">0.30</span></div>
+    <input id="sRot" type="range" min="0" max="2" step="0.01" value="0.3">
+  </div>
+</div>
+
+<div id="legenda">
+  <div><b>0,42 &micro;m</b> &times; <b>0,95 &micro;m</b></div>
+  <div>gram-negativo &middot; imovel &middot; sem esporo</div>
+  <div><i>reconstrucao volumetrica por amostragem de superficie</i></div>
+</div>
+<div id="dica">arraste para girar</div>
+
+<!-- Three.js + addons via CDN (importmap) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+/* =========================================================
+   0. Cena, camera, renderer
+   ========================================================= */
+const canvas   = document.getElementById('cena');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // travado em 2
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.setClearColor(0x07090C, 1);
+
+const cena = new THREE.Scene();
+cena.fog = new THREE.FogExp2(0x07090C, 0.06);
+
+const camera = new THREE.PerspectiveCamera(34, window.innerWidth/window.innerHeight, 0.1, 100);
+const ALVO = new THREE.Vector3(-0.28, -0.02, 0);
+
+// mantem o objeto inteiro no quadro em qualquer proporcao de tela
+let cenaPronta = false;   // vira true quando todas as camadas existem
+function enquadrar(){
+  const asp = window.innerWidth / window.innerHeight;
+  camera.aspect = asp;
+  const k = 2 * Math.tan(THREE.MathUtils.degToRad(34 / 2)); // altura visivel por unidade de distancia
+  const dLarg = 4.4 / (k * asp);   // largura necessaria (celula + celula em divisao)
+  const dAlt  = 2.3 / k;           // altura necessaria
+  camera.position.set(0.35, 0.7, Math.max(6.5, dLarg, dAlt));
+  // em telas estreitas a celula em divisao se aproxima para nao sair do quadro
+  if (cenaPronta){
+    grpDivisao.position.x = asp < 1.25 ? 1.35 : 1.95;
+    grpDivisao.position.y = asp < 1.25 ? -1.12 : -0.98;
+  }
+  camera.lookAt(ALVO);
+  camera.updateProjectionMatrix();
+}
+enquadrar();
+
+/* Iluminacao de estudio: principal + contorno atras + fill fraco */
+const luzPrincipal = new THREE.DirectionalLight(0xbfffff, 2.3); luzPrincipal.position.set(-3.2, 2.3, 2.0);
+const luzContorno  = new THREE.DirectionalLight(0xff6fbe, 1.8); luzContorno.position.set(2.8, 0.9, -3.2);
+const luzFill      = new THREE.DirectionalLight(0x1a5f6b, 0.6); luzFill.position.set(3.0, 0.6, 2.0);
+cena.add(luzPrincipal, luzContorno, luzFill, new THREE.AmbientLight(0x08222a, 0.5));
+
+/* Cores base */
+const C_CIANO   = new THREE.Color(0x22E8E0);
+const C_MAGENTA = new THREE.Color(0xFF3FA4);
+
+/* =========================================================
+   1. Geometria procedural do cocobacilo
+   Perfil superelipsoide: bastonete CURTO, quase oval (~2.2:1)
+   ========================================================= */
+// ruido suave (soma de senos) -> leve irregularidade organica, sem espinhos
+function ruidoOrganico(x, y, z, s){
+  return 0.55*Math.sin(2.3*x*s + 1.7)*Math.sin(2.9*y*s + 0.4)*Math.sin(2.1*z*s + 2.3)
+       + 0.30*Math.sin(4.1*y*s + 0.9)*Math.sin(3.7*z*s + 1.1)
+       + 0.15*Math.sin(5.3*x*s + 2.6)*Math.sin(4.9*y*s + 0.2);
+}
+
+// malha do cocobacilo: meioL = metade do eixo maior, raio = eixo menor
+function geoCocobacilo(meioL, raio, expo, segU, segV, amp, semente){
+  const pos = [], idx = [];
+  for (let i = 0; i <= segU; i++){
+    const u = i / segU;                      // 0..1 ao longo do eixo
+    const t = Math.cos(u * Math.PI);         // 1..-1
+    // perfil superelipsoide: r(t) = (1 - |t|^expo)^(1/expo)
+    const p = Math.pow(Math.max(0, 1 - Math.pow(Math.abs(t), expo)), 1/expo);
+    for (let j = 0; j <= segV; j++){
+      const v = j / segV * Math.PI * 2;
+      let x = meioL * t, y = raio * p * Math.cos(v), z = raio * p * Math.sin(v);
+      // desloca radialmente: superficie lisa, ondulacao muito suave
+      const n = ruidoOrganico(x + semente, y + semente*0.7, z, 1.25);
+      const k = 1 + amp * n * (0.45 + 0.55 * p);
+      y *= k; z *= k; x *= 1 + amp * 0.3 * n;
+      pos.push(x, y, z);
+    }
+  }
+  for (let i = 0; i < segU; i++){
+    for (let j = 0; j < segV; j++){
+      const a = i*(segV+1)+j, b = a+segV+1;
+      idx.push(a, b, a+1, b, b+1, a+1);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+
+// corpo principal: 2,12 m de comprimento / 0,96 de largura -> ~2,2 : 1
+const MEIO_L = 1.06, RAIO = 0.48;
+const geoCorpo = geoCocobacilo(MEIO_L, RAIO, 2.55, 120, 140, 0.055, 0.0);
+
+/* =========================================================
+   2. Shader dos pontos (gradiente ciano -> magenta + fresnel)
+   GLSL ES 1.00, padrao do ShaderMaterial do three
+   ========================================================= */
+const vsPontos = `
+  attribute float aTam;
+  attribute float aSeed;
+  uniform float uTempo;
+  uniform float uDPR;
+  uniform float uEscalaTam;
+  uniform float uResp;
+  uniform float uSopro;
+  uniform vec3 uLuzDir;
+  uniform vec3 uLuzTras;
+  uniform float uVarredura;
+  uniform float uVarrForca;
+  varying float vGrad;
+  varying float vRim;
+  varying float vCintila;
+  varying float vLuz;
+  varying float vScan;
+  void main(){
+    // "respiracao" da camada: desloca ao longo da normal
+    float resp = sin(uTempo * 1.15 + aSeed * 6.2831) * uResp;
+    vec3 p = position + normal * (resp + uSopro);
+    vec4 mv = modelViewMatrix * vec4(p, 1.0);
+    gl_Position = projectionMatrix * mv;
+    // tamanho atenuado pela distancia
+    float tam = aTam * uEscalaTam * uDPR * (115.0 / max(0.001, -mv.z));
+    gl_PointSize = clamp(tam, 0.5, 9.0 * uDPR);
+    vec3 n  = normalize(normalMatrix * normal);
+    vec3 vd = normalize(-mv.xyz);
+    float fres = pow(1.0 - abs(dot(n, vd)), 2.9);
+    // contra-luz define ONDE o contorno acende -> meia-lua, nao anel fechado
+    float costas = max(dot(n, normalize(uLuzTras)), 0.0);
+    vRim = fres * (0.18 + 1.25 * costas);
+    // half-lambert: gradiente suave da luz principal atravessando a face visivel
+    float hl = 0.5 + 0.5 * dot(n, normalize(uLuzDir));
+    vLuz = pow(max(hl, 0.0), 2.1);
+    vLuz += 0.28 * costas;
+    vGrad = clamp(0.5 + 0.55 * normalize(position + vec3(0.0001)).y, 0.0, 1.0);
+    vCintila = 0.8 + 0.2 * sin(uTempo * 2.1 + aSeed * 31.4);
+    // faixa gaussiana que percorre o eixo X do objeto
+    float dx = (position.x - uVarredura) / 0.075;
+    vScan = uVarrForca * exp(-dx * dx);
+  }
+`;
+
+const fsPontos = `
+  precision highp float;
+  uniform vec3 uCorA;
+  uniform vec3 uCorB;
+  uniform float uOpacidade;
+  uniform float uBrilho;
+  uniform float uRim;
+  varying float vGrad;
+  varying float vRim;
+  varying float vCintila;
+  varying float vLuz;
+  varying float vScan;
+  void main(){
+    vec2 d = gl_PointCoord - vec2(0.5);
+    float r = length(d);
+    if (r > 0.5) discard;
+    float halo   = smoothstep(0.5, 0.08, r);   // borda suave
+    float nucleo = smoothstep(0.24, 0.0, r);   // nucleo do ponto
+    // ciano domina; magenta entra so no contorno (rim) e um pouco na profundidade
+    float rim = vRim * uRim;
+    float mistura = clamp(rim * 0.55 + vGrad * 0.14, 0.0, 1.0);
+    vec3 cor = mix(uCorA, uCorB, mistura);
+    cor *= (0.14 + 1.2 * vLuz + 0.42 * rim) * vCintila * uBrilho;
+    cor += uCorA * vScan * 1.1;                // brilho da varredura
+    float a = (halo * 0.3 + nucleo * 0.7) * uOpacidade * (0.16 + 1.05 * vLuz + 0.4 * rim);
+    a *= 1.0 + 1.6 * vScan;
+    gl_FragColor = vec4(cor, clamp(a, 0.0, 1.0));
+  }
+`;
+
+function matPontos(o){
+  return new THREE.ShaderMaterial({
+    uniforms:{
+      uTempo:{value:0}, uDPR:{value:renderer.getPixelRatio()},
+      uEscalaTam:{value:o.tam}, uResp:{value:o.resp || 0}, uSopro:{value:0},
+      uCorA:{value:o.corA.clone()}, uCorB:{value:o.corB.clone()},
+      uOpacidade:{value:o.opacidade}, uBrilho:{value:1},
+      uRim:{value:o.rim === undefined ? 1 : o.rim},
+      uVarredura:{value:-99}, uVarrForca:{value:o.varr || 0},
+      uLuzDir:{value:new THREE.Vector3(-0.6, 0.65, 0.45)},   // luz principal (view space)
+      uLuzTras:{value:new THREE.Vector3(0.45, -0.2, -0.85)}  // contorno atras
+    },
+    vertexShader:vsPontos, fragmentShader:fsPontos,
+    transparent:true, depthWrite:false, depthTest:true,
+    blending:THREE.AdditiveBlending
+  });
+}
+
+/* Amostragem UNIFORME sobre a superficie -> posicoes + normais + tamanhos */
+function amostrarSuperficie(geo, n, opt){
+  const o = opt || {};
+  const escala = o.escala === undefined ? 1 : o.escala;
+  const jitter = o.jitter || 0;
+  const tMin = o.tamMin === undefined ? 0.9 : o.tamMin;
+  const tMax = o.tamMax === undefined ? 2.2 : o.tamMax;
+  const malha = new THREE.Mesh(geo, new THREE.MeshBasicMaterial());
+  malha.updateMatrixWorld(true);
+  const amostrador = new MeshSurfaceSampler(malha).build();
+  const P = new Float32Array(n*3), N = new Float32Array(n*3);
+  const T = new Float32Array(n),   S = new Float32Array(n);
+  const p = new THREE.Vector3(), nr = new THREE.Vector3();
+  for (let i = 0; i < n; i++){
+    amostrador.sample(p, nr);
+    p.multiplyScalar(escala);
+    if (jitter) p.addScaledVector(nr, (Math.random()*2-1) * jitter);
+    P[i*3]=p.x; P[i*3+1]=p.y; P[i*3+2]=p.z;
+    N[i*3]=nr.x; N[i*3+1]=nr.y; N[i*3+2]=nr.z;
+    T[i] = tMin + Math.random()*(tMax-tMin);
+    S[i] = Math.random();
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(P,3));
+  g.setAttribute('normal',   new THREE.BufferAttribute(N,3));
+  g.setAttribute('aTam',     new THREE.BufferAttribute(T,1));
+  g.setAttribute('aSeed',    new THREE.BufferAttribute(S,1));
+  return g;
+}
+
+/* =========================================================
+   3. Shader de fresnel das cascas (membrana / capsula)
+   ========================================================= */
+const vsCasca = `
+  varying vec3 vN;
+  varying vec3 vP;
+  void main(){
+    vN = normalize(normalMatrix * normal);
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vP = mv.xyz;
+    gl_Position = projectionMatrix * mv;
+  }
+`;
+const fsCasca = `
+  precision highp float;
+  uniform vec3 uCorA;
+  uniform vec3 uCorB;
+  uniform vec3 uLuzTras;
+  uniform float uForca;
+  uniform float uPot;
+  uniform float uBrilho;
+  varying vec3 vN;
+  varying vec3 vP;
+  void main(){
+    vec3 n = normalize(vN);
+    vec3 vd = normalize(-vP);
+    float f = pow(1.0 - abs(dot(n, vd)), uPot);
+    // acende so do lado da contra-luz
+    f *= 0.2 + 1.35 * max(dot(n, normalize(uLuzTras)), 0.0);
+    vec3 cor = mix(uCorA, uCorB, clamp(f * 0.9, 0.0, 1.0)) * (f * uForca) * uBrilho;
+    gl_FragColor = vec4(cor, clamp(f * uForca * 0.9, 0.0, 1.0));
+  }
+`;
+function matCasca(o){
+  return new THREE.ShaderMaterial({
+    uniforms:{ uCorA:{value:o.corA.clone()}, uCorB:{value:o.corB.clone()},
+               uForca:{value:o.forca}, uPot:{value:o.pot}, uBrilho:{value:1},
+               uLuzTras:{value:new THREE.Vector3(0.45,-0.2,-0.85)} },
+    vertexShader:vsCasca, fragmentShader:fsCasca,
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, side:THREE.DoubleSide
+  });
+}
+
+/* =========================================================
+   4. CAMADAS (objetos separados e nomeados, p/ vista explodida)
+   ========================================================= */
+const bacteria = new THREE.Group(); bacteria.name = 'bacteria';
+cena.add(bacteria);
+
+/* --- 4.1 corpo / citoplasma: malha interna translucida escura + nucleoide --- */
+const grpCorpo = new THREE.Group(); grpCorpo.name = 'corpo_citoplasma';
+
+const malhaCitoplasma = new THREE.Mesh(
+  geoCorpo,
+  new THREE.MeshPhysicalMaterial({
+    color:0x07303a, emissive:0x052a33, emissiveIntensity:0.45,
+    roughness:0.34, metalness:0.08, clearcoat:0.9, clearcoatRoughness:0.22,
+    transparent:true, opacity:0.93, side:THREE.FrontSide, depthWrite:true // ocluta pontos do fundo
+  })
+);
+malhaCitoplasma.name = 'malha_citoplasma';
+malhaCitoplasma.scale.setScalar(0.965);
+malhaCitoplasma.renderOrder = -1;   // escreve profundidade antes dos pontos
+grpCorpo.add(malhaCitoplasma);
+
+// pontos internos esparsos: da volume, evita nuvem vazia
+const pontosNucleoide = new THREE.Points(
+  amostrarSuperficie(geoCorpo, 3000, { tamMin:0.5, tamMax:1.4, escala:0.62 }),
+  matPontos({ corA:new THREE.Color(0x0d8f9c), corB:C_MAGENTA, opacidade:0.18, tam:0.5, resp:0.012 })
+);
+pontosNucleoide.name = 'pontos_nucleoide';
+grpCorpo.add(pontosNucleoide);
+bacteria.add(grpCorpo);
+
+/* --- 4.2 membrana externa: nuvem DENSA na superficie + rim light --- */
+const grpMembrana = new THREE.Group(); grpMembrana.name = 'membrana_externa';
+
+const pontosMembrana = new THREE.Points(
+  amostrarSuperficie(geoCorpo, 52000, { tamMin:0.55, tamMax:1.5, jitter:0.004 }),
+  matPontos({ corA:C_CIANO, corB:C_MAGENTA, opacidade:0.17, tam:0.44, resp:0.004, varr:0.85 })
+);
+pontosMembrana.name = 'pontos_membrana';
+grpMembrana.add(pontosMembrana);
+
+const cascaMembrana = new THREE.Mesh(geoCorpo, matCasca({ corA:C_CIANO, corB:new THREE.Color(0xff7ac4), forca:0.22, pot:4.0 }));
+cascaMembrana.name = 'casca_fresnel_membrana';
+cascaMembrana.scale.setScalar(1.008);
+grpMembrana.add(cascaMembrana);
+bacteria.add(grpMembrana);
+
+/* --- 4.3 capsula de polissacarideo: pontos esparsos/maiores + casca translucida --- */
+const grpCapsula = new THREE.Group(); grpCapsula.name = 'capsula_polissacarideo';
+
+const pontosCapsula = new THREE.Points(
+  amostrarSuperficie(geoCorpo, 8000, { tamMin:1.0, tamMax:2.4, jitter:0.018, escala:1.095 }),
+  matPontos({ corA:new THREE.Color(0x8ff6ff), corB:C_MAGENTA, opacidade:0.13, tam:0.7, resp:0.028 })
+);
+pontosCapsula.name = 'pontos_capsula';
+grpCapsula.add(pontosCapsula);
+
+const cascaCapsula = new THREE.Mesh(geoCorpo, matCasca({ corA:C_CIANO, corB:new THREE.Color(0xbdefff), forca:0.07, pot:3.8 }));
+cascaCapsula.name = 'casca_capsula';
+cascaCapsula.scale.setScalar(1.115);
+grpCapsula.add(cascaCapsula);
+bacteria.add(grpCapsula);
+
+/* --- 4.4 fimbrias / pili: cadeias CURTAS e ESPARSAS de pontos --- */
+const grpFimbrias = new THREE.Group(); grpFimbrias.name = 'fimbrias';
+(function criarFimbrias(){
+  const N_FIM = 14, PTS = 12;              // poucos filamentos, finos e curtos
+  const total = N_FIM * PTS;
+  const P = new Float32Array(total*3), N = new Float32Array(total*3);
+  const T = new Float32Array(total),   S = new Float32Array(total);
+  const malha = new THREE.Mesh(geoCorpo, new THREE.MeshBasicMaterial());
+  malha.updateMatrixWorld(true);
+  const am = new MeshSurfaceSampler(malha).build();
+  const p0 = new THREE.Vector3(), n0 = new THREE.Vector3();
+  const tan = new THREE.Vector3(), aux = new THREE.Vector3();
+  let k = 0;
+  for (let f = 0; f < N_FIM; f++){
+    am.sample(p0, n0);
+    const compr = 0.10 + Math.random()*0.11;            // filamento curto
+    aux.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5);
+    tan.copy(aux).cross(n0).normalize();                // leve curvatura lateral
+    const sem = Math.random();
+    for (let i = 0; i < PTS; i++){
+      const t = i/(PTS-1);
+      const pos = p0.clone()
+        .addScaledVector(n0, 0.01 + t*compr)
+        .addScaledVector(tan, Math.sin(t*1.8)*compr*0.3*t);
+      P[k*3]=pos.x; P[k*3+1]=pos.y; P[k*3+2]=pos.z;
+      N[k*3]=n0.x;  N[k*3+1]=n0.y;  N[k*3+2]=n0.z;
+      T[k] = 1.15 - t*0.5; S[k] = sem + t*0.05;
+      k++;
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(P,3));
+  g.setAttribute('normal',   new THREE.BufferAttribute(N,3));
+  g.setAttribute('aTam',     new THREE.BufferAttribute(T,1));
+  g.setAttribute('aSeed',    new THREE.BufferAttribute(S,1));
+  const pts = new THREE.Points(g, matPontos({
+    corA:new THREE.Color(0xd8fffd), corB:C_MAGENTA, opacidade:0.34, tam:0.42, resp:0.01
+  }));
+  pts.name = 'pontos_fimbrias';
+  grpFimbrias.add(pts);
+})();
+bacteria.add(grpFimbrias);
+
+/* --- 4.5 detalhe: divisao binaria (halter), discreto ao fundo --- */
+const grpDivisao = new THREE.Group(); grpDivisao.name = 'celula_divisao_binaria';
+(function criarHalter(){
+  // dois corpos unidos; pleomorfico -> proporcao levemente diferente
+  const geos = [ geoCocobacilo(0.62, 0.34, 2.4, 64, 76, 0.045, 3.1),
+                 geoCocobacilo(0.58, 0.33, 2.4, 64, 76, 0.045, 7.7) ];
+  const desloc = [ -0.44, 0.44 ];
+  const alvo = new THREE.Group();
+  for (let i = 0; i < 2; i++){
+    const pts = new THREE.Points(
+      amostrarSuperficie(geos[i], 7000, { tamMin:0.5, tamMax:1.3, jitter:0.004 }),
+      matPontos({ corA:C_CIANO, corB:C_MAGENTA, opacidade:0.13, tam:0.42, resp:0.005 })
+    );
+    pts.position.x = desloc[i];
+    pts.name = 'halter_pontos_' + i;
+    const corpo = new THREE.Mesh(geos[i], new THREE.MeshPhysicalMaterial({
+      color:0x04202a, roughness:0.5, metalness:0, transparent:true, opacity:0.88
+    }));
+    corpo.position.x = desloc[i];
+    corpo.scale.setScalar(0.96);
+    corpo.renderOrder = -1;
+    corpo.name = 'halter_corpo_' + i;
+    alvo.add(pts, corpo);
+  }
+  alvo.scale.setScalar(0.5);
+  grpDivisao.add(alvo);
+  grpDivisao.position.set(1.95, -0.98, -2.4);
+  grpDivisao.rotation.set(0.1, 0.4, -0.33);
+})();
+cena.add(grpDivisao);   // gira no proprio ritmo, nao orbita a celula principal
+
+/* --- 4.6 reflexo sutil de estudio: poca de luz difusa sob a celula --- */
+const grpReflexo = new THREE.Group(); grpReflexo.name = 'reflexo_estudio';
+(function criarReflexo(){
+  // textura gerada em codigo: gradiente radial suave
+  const cv = document.createElement('canvas'); cv.width = cv.height = 256;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+  g.addColorStop(0.0, 'rgba(160,255,252,0.85)');
+  g.addColorStop(0.35, 'rgba(34,232,224,0.32)');
+  g.addColorStop(1.0, 'rgba(34,232,224,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 256);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const plano = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1),
+    new THREE.MeshBasicMaterial({ map:tex, transparent:true, opacity:0.2,
+      blending:THREE.AdditiveBlending, depthWrite:false, depthTest:false })
+  );
+  plano.name = 'poca_de_luz';
+  plano.scale.set(2.9, 0.62, 1);
+  plano.position.set(-0.12, -0.88, -0.35);
+  plano.renderOrder = -2;
+  grpReflexo.add(plano);
+})();
+cena.add(grpReflexo);   // fica parado: nao gira com a celula
+
+
+/* escalas base para a vista explodida (camadas concentricas se afastam) */
+const camadas = [
+  { obj:grpCorpo,    base:1.00, fator:-0.08 },
+  { obj:grpMembrana, base:1.00, fator: 0.26 },
+  { obj:grpCapsula,  base:1.00, fator: 0.78 },
+  { obj:grpFimbrias, base:1.00, fator: 0.46 }
+];
+
+/* =========================================================
+   5. Post-processing: bloom
+   ========================================================= */
+const composer = new EffectComposer(renderer);
+composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+composer.setSize(window.innerWidth, window.innerHeight);
+composer.addPass(new RenderPass(cena, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+/* =========================================================
+   6. Controles
+   ========================================================= */
+const ui = {
+  capsula:  document.getElementById('cCapsula'),
+  fimbrias: document.getElementById('cFimbrias'),
+  divisao:  document.getElementById('cDivisao'),
+  expl:     document.getElementById('sExpl'),
+  brilho:   document.getElementById('sBrilho'),
+  rot:      document.getElementById('sRot')
+};
+const out = {
+  expl:   document.getElementById('vExpl'),
+  brilho: document.getElementById('vBrilho'),
+  rot:    document.getElementById('vRot')
+};
+let explodir = 0, brilho = 1, velRot = 0.3;
+
+function lerUI(){
+  grpCapsula.visible  = ui.capsula.checked;
+  grpFimbrias.visible = ui.fimbrias.checked;
+  grpDivisao.visible  = ui.divisao.checked;
+  explodir = parseFloat(ui.expl.value);
+  brilho   = parseFloat(ui.brilho.value);
+  velRot   = parseFloat(ui.rot.value);
+  out.expl.textContent   = explodir.toFixed(2);
+  out.brilho.textContent = brilho.toFixed(2);
+  out.rot.textContent    = velRot.toFixed(2);
+  bloom.strength = 0.1 + Math.pow(brilho, 0.8) * 0.34;
+  renderer.toneMappingExposure = 0.82 + Math.pow(brilho, 0.7) * 0.12;
+}
+Object.keys(ui).forEach(k => ui[k].addEventListener('input', lerUI));
+lerUI();
+
+/* arrasto com inercia no eixo Y */
+let girando = false, ultimoX = 0, velInercia = 0, anguloY = 0;
+canvas.addEventListener('pointerdown', e => {
+  girando = true; ultimoX = e.clientX;
+  try { canvas.setPointerCapture(e.pointerId); } catch(err){}
+});
+canvas.addEventListener('pointermove', e => {
+  if (!girando) return;
+  const dx = e.clientX - ultimoX; ultimoX = e.clientX;
+  velInercia += dx * 0.00042;
+});
+window.addEventListener('pointerup',     () => { girando = false; });
+window.addEventListener('pointercancel', () => { girando = false; });
+
+/* =========================================================
+   7. Loop
+   ========================================================= */
+cenaPronta = true;
+enquadrar();   // agora que todas as camadas existem
+const relogio = new THREE.Timer();
+const dirLuz = new THREE.Vector3(), dirTras = new THREE.Vector3();
+const materiaisPontos = [];
+cena.traverse(o => { if (o.isPoints) materiaisPontos.push(o.material); });  // inclui a celula em divisao
+const materiaisCasca = [cascaMembrana.material, cascaCapsula.material];
+
+function anima(){
+  relogio.update();
+  const t = relogio.getElapsed();
+
+  // rotacao lenta no eixo Y, com inercia suave
+  anguloY += velRot * 0.0045 + velInercia;
+  velInercia *= 0.94;
+  bacteria.rotation.y = anguloY;
+  bacteria.rotation.z = Math.sin(t*0.18) * 0.045;      // balanco discreto
+  bacteria.rotation.x = 0.1 + Math.sin(t*0.12) * 0.03;
+  grpDivisao.rotation.y = 0.4 + anguloY * 0.45;   // deriva lenta e independente
+
+  // vista explodida
+  for (let i = 0; i < camadas.length; i++){
+    const c = camadas[i];
+    c.obj.scale.setScalar(c.base + c.fator * explodir);
+  }
+  malhaCitoplasma.material.opacity = 0.93 - explodir * 0.38;
+
+  // direcoes de luz convertidas para espaco de camera
+  dirLuz.copy(luzPrincipal.position).normalize().transformDirection(camera.matrixWorldInverse);
+  dirTras.copy(luzContorno.position).normalize().transformDirection(camera.matrixWorldInverse);
+
+  // uniforms
+  for (let i = 0; i < materiaisPontos.length; i++){
+    const u = materiaisPontos[i].uniforms;
+    u.uTempo.value = t;
+    u.uBrilho.value = Math.pow(brilho, 0.72);
+    u.uLuzDir.value.copy(dirLuz);
+    u.uLuzTras.value.copy(dirTras);
+  }
+  for (let i = 0; i < materiaisCasca.length; i++){
+    materiaisCasca[i].uniforms.uBrilho.value = Math.pow(brilho, 0.8);
+    materiaisCasca[i].uniforms.uLuzTras.value.copy(dirTras);
+  }
+  // varredura percorre o eixo e depois sai de cena (pausa)
+  const fase = Math.min(1, (t % 7.4) / 3.4);
+  const varr = -1.45 + 2.95 * fase;
+  pontosMembrana.material.uniforms.uVarredura.value = (fase >= 1) ? -99 : varr;
+
+  // a capsula "respira"
+  pontosCapsula.material.uniforms.uSopro.value = Math.sin(t*0.9) * 0.02;
+
+  composer.render();
+  requestAnimationFrame(anima);
+}
+anima();
+
+window.addEventListener('resize', () => {
+  enquadrar();
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  bloom.resolution.set(window.innerWidth, window.innerHeight);
+  for (let i = 0; i < materiaisPontos.length; i++){
+    materiaisPontos[i].uniforms.uDPR.value = renderer.getPixelRatio();
+  }
+});
+
+// camadas expostas para a animacao da apresentacao (vista explodida por camada)
+window.CAMADAS = {
+  corpo: grpCorpo, membrana: grpMembrana, capsula: grpCapsula,
+  fimbrias: grpFimbrias, divisao: grpDivisao, reflexo: grpReflexo, raiz: bacteria
+};
+</script>
+</body>
+</html>
