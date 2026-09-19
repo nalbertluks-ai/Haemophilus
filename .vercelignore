@@ -4,5 +4,3 @@ dist/
 _antigo/
 tools/blender/saida/
 *.log
-
-.vercel
